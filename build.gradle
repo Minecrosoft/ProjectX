@@ -18,7 +18,7 @@ buildscript {
 apply plugin: 'forge'
 
 version = "0.0.1"
-group= "trealm" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+group= "twinrealm" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "TwinRealm"
 
 minecraft {

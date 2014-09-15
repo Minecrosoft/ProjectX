@@ -1,0 +1,16 @@
+[
+{
+  "modid": "trealm",
+  "name": "Twin Realm",
+  "description": "Adds the dimension Twin Realm to the game.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Ivorius"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
