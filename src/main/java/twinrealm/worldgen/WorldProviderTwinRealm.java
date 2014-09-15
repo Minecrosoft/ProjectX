@@ -16,7 +16,7 @@ public class WorldProviderTwinRealm extends WorldProvider
     @Override
     public String getDimensionName()
     {
-        return "TwinRealm";
+        return "Twin Realm";
     }
 
     @Override
