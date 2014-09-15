@@ -5,11 +5,14 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.config.Configuration;
 import org.apache.logging.log4j.Logger;
 import twinrealm.configuration.TRConfig;
 import twinrealm.events.TREventHandlerFML;
 import twinrealm.events.TREventHandlerForge;
+import twinrealm.worldgen.TRDimensions;
+import twinrealm.worldgen.WorldProviderTwinRealm;
 
 /**
  * Created by lukas on 15.09.14.
@@ -49,6 +52,10 @@ public class TwinRealm
 
         eventHandlerFML = new TREventHandlerFML();
         eventHandlerFML.register();
+
+        TRDimensions.twinRealm = DimensionManager.getNextFreeDimId();
+        DimensionManager.registerProviderType(TRDimensions.twinRealmProviderType, WorldProviderTwinRealm.class, true);
+        DimensionManager.registerDimension(TRDimensions.twinRealm, TRDimensions.twinRealmProviderType);
     }
 
     @Mod.EventHandler
