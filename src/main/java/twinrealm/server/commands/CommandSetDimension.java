@@ -1,10 +1,14 @@
 package twinrealm.server.commands;
 
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
+import twinrealm.worldgen.TeleporterNone;
 
 import java.util.List;
 
@@ -36,9 +40,16 @@ public class CommandSetDimension extends CommandBase
             throw new WrongUsageException("commands.dimension.usage");
 
         Integer dimension = parseInt(commandSender, args[0]);
-        EntityPlayer player = getCommandSenderAsPlayer(commandSender);
+        if (DimensionManager.isDimensionRegistered(dimension))
+        {
+            EntityPlayerMP player = getCommandSenderAsPlayer(commandSender);
 
-        player.travelToDimension(dimension);
+            WorldServer worldServer = (WorldServer) commandSender.getEntityWorld();
+
+            worldServer.func_73046_m().getConfigurationManager().transferPlayerToDimension(player, dimension, new TeleporterNone(worldServer));
+        }
+        else
+            throw new CommandException("commands.dimension.nodimension", String.valueOf(dimension));
     }
 
     @Override

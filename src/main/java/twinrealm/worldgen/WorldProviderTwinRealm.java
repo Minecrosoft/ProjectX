@@ -8,8 +8,21 @@ import net.minecraft.world.WorldProvider;
 public class WorldProviderTwinRealm extends WorldProvider
 {
     @Override
+    protected void registerWorldChunkManager()
+    {
+        this.worldChunkMgr = new WorldChunkManagerTwinRealm();
+        this.dimensionId = TRDimensions.twinRealm;
+    }
+
+    @Override
     public String getDimensionName()
     {
         return "TwinRealm";
+    }
+
+    @Override
+    public boolean isSurfaceWorld()
+    {
+        return true;
     }
 }
