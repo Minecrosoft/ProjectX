@@ -6,5 +6,5 @@ package twinrealm.worldgen;
 public class TRDimensions
 {
     public static int twinRealm;
-    public static final int twinRealmProviderType = 2;
+    public static final int twinRealmProviderType = 51342;
 }
