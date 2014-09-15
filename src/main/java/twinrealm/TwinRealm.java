@@ -8,6 +8,8 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.common.config.Configuration;
 import org.apache.logging.log4j.Logger;
 import twinrealm.configuration.TRConfig;
+import twinrealm.events.TREventHandlerFML;
+import twinrealm.events.TREventHandlerForge;
 
 /**
  * Created by lukas on 15.09.14.
@@ -29,6 +31,9 @@ public class TwinRealm
     @SidedProxy(clientSide = "twinrealm.client.TRClientProxy", serverSide = "twinrealm.server.TRServerProxy")
     public static TRProxy proxy;
 
+    public static TREventHandlerForge eventHandlerForge;
+    public static TREventHandlerFML eventHandlerFML;
+
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
@@ -38,6 +43,12 @@ public class TwinRealm
         config.load();
         TRConfig.loadConfig(null);
         config.save();
+
+        eventHandlerForge = new TREventHandlerForge();
+        eventHandlerForge.register();
+
+        eventHandlerFML = new TREventHandlerFML();
+        eventHandlerFML.register();
     }
 
     @Mod.EventHandler
