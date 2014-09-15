@@ -12,4 +12,10 @@ public class TRClientProxy implements TRProxy
     {
 
     }
+
+    @Override
+    public void loadConfig(String configID)
+    {
+
+    }
 }

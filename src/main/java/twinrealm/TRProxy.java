@@ -6,4 +6,6 @@ package twinrealm;
 public interface TRProxy
 {
     void registerRenderers();
+
+    void loadConfig(String configID);
 }

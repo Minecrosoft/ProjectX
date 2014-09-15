@@ -5,7 +5,9 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.common.config.Configuration;
 import org.apache.logging.log4j.Logger;
+import twinrealm.configuration.TRConfig;
 
 /**
  * Created by lukas on 15.09.14.
@@ -22,6 +24,8 @@ public class TwinRealm
 
     public static Logger logger;
 
+    public static Configuration config;
+
     @SidedProxy(clientSide = "twinrealm.client.TRClientProxy", serverSide = "twinrealm.server.TRServerProxy")
     public static TRProxy proxy;
 
@@ -29,6 +33,11 @@ public class TwinRealm
     public void preInit(FMLPreInitializationEvent event)
     {
         logger = event.getModLog();
+
+        config = new Configuration(event.getSuggestedConfigurationFile());
+        config.load();
+        TRConfig.loadConfig(null);
+        config.save();
     }
 
     @Mod.EventHandler
