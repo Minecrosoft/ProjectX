@@ -11,7 +11,6 @@ public class WorldProviderTwinRealm extends WorldProvider
     protected void registerWorldChunkManager()
     {
         this.worldChunkMgr = new WorldChunkManagerTwinRealm();
-        this.dimensionId = TRDimensions.twinRealm;
     }
 
     @Override
