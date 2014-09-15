@@ -14,7 +14,7 @@ import twinrealm.events.TREventHandlerForge;
 /**
  * Created by lukas on 15.09.14.
  */
-@Mod(modid = TwinRealm.MODID, version = TwinRealm.VERSION, name = TwinRealm.NAME)
+@Mod(modid = TwinRealm.MODID, version = TwinRealm.VERSION, name = TwinRealm.NAME, guiFactory = "twinrealm.gui.TRConfigGuiFactory")
 public class TwinRealm
 {
     public static final String NAME = "Twin Realm";
