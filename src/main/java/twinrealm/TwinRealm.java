@@ -1,6 +1,7 @@
 package twinrealm;
 
 import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
@@ -20,6 +21,9 @@ public class TwinRealm
     public static TwinRealm instance;
 
     public static Logger logger;
+
+    @SidedProxy(clientSide = "twinrealm.client.TRClientProxy", serverSide = "twinrealm.server.TRServerProxy")
+    public static TRProxy proxy;
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event)
