@@ -12,6 +12,7 @@ import org.apache.logging.log4j.Logger;
 import twinrealm.configuration.TRConfig;
 import twinrealm.events.TREventHandlerFML;
 import twinrealm.events.TREventHandlerForge;
+import twinrealm.events.TREventHandlerTerrain;
 import twinrealm.server.commands.CommandSetDimension;
 import twinrealm.worldgen.TRDimensions;
 import twinrealm.worldgen.WorldProviderTwinRealm;
@@ -38,6 +39,7 @@ public class TwinRealm
 
     public static TREventHandlerForge eventHandlerForge;
     public static TREventHandlerFML eventHandlerFML;
+    public static TREventHandlerTerrain eventHandlerTerrain;
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event)
@@ -54,6 +56,9 @@ public class TwinRealm
 
         eventHandlerFML = new TREventHandlerFML();
         eventHandlerFML.register();
+
+        eventHandlerTerrain = new TREventHandlerTerrain();
+        eventHandlerTerrain.register();
 
         TRDimensions.twinRealm = DimensionManager.getNextFreeDimId();
         DimensionManager.registerProviderType(TRDimensions.twinRealmProviderType, WorldProviderTwinRealm.class, true);
