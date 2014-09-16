@@ -6,9 +6,13 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraft.item.ItemBlock;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.config.Configuration;
 import org.apache.logging.log4j.Logger;
+import twinrealm.blocks.BlockRedRock;
+import twinrealm.blocks.TRBlocks;
 import twinrealm.configuration.TRConfig;
 import twinrealm.events.TREventHandlerFML;
 import twinrealm.events.TREventHandlerForge;
@@ -41,6 +45,8 @@ public class TwinRealm
     public static TREventHandlerFML eventHandlerFML;
     public static TREventHandlerTerrain eventHandlerTerrain;
 
+    public static String textureBase = "twinrealm:";
+
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
@@ -59,6 +65,8 @@ public class TwinRealm
 
         eventHandlerTerrain = new TREventHandlerTerrain();
         eventHandlerTerrain.register();
+
+        registerBlocks();
 
         TRDimensions.twinRealm = DimensionManager.getNextFreeDimId();
         DimensionManager.registerProviderType(TRDimensions.twinRealmProviderType, WorldProviderTwinRealm.class, true);
@@ -82,4 +90,12 @@ public class TwinRealm
     {
         event.registerServerCommand(new CommandSetDimension());
     }
+
+    private void registerBlocks() {
+
+        TRBlocks.redRock = new BlockRedRock().setBlockName("redRock").setBlockTextureName(textureBase + "redRock");
+        GameRegistry.registerBlock(TRBlocks.redRock, ItemBlock.class, "red_rock");
+
+    }
+
 }
