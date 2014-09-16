@@ -11,7 +11,7 @@ import net.minecraft.item.ItemBlock;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.config.Configuration;
 import org.apache.logging.log4j.Logger;
-import twinrealm.blocks.BlockRedRock;
+import twinrealm.blocks.*;
 import twinrealm.blocks.TRBlocks;
 import twinrealm.configuration.TRConfig;
 import twinrealm.events.TREventHandlerFML;
@@ -93,8 +93,11 @@ public class TwinRealm
 
     private void registerBlocks() {
 
-        TRBlocks.redRock = new BlockRedRock().setBlockName("redRock").setBlockTextureName(textureBase + "redRock");
+        TRBlocks.redRock = new TRBaseRock().setBlockName("redRock").setBlockTextureName(textureBase + "redRock");
         GameRegistry.registerBlock(TRBlocks.redRock, ItemBlock.class, "red_rock");
+
+        TRBlocks.yellowSand = new TRBaseSand().setBlockName("yellowSand").setBlockTextureName(textureBase + "yellowSand");
+        GameRegistry.registerBlock(TRBlocks.yellowSand, ItemBlock.class, "yellow_sand");
 
     }
 

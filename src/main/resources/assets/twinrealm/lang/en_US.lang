@@ -5,3 +5,4 @@ trealm.configgui.ctgy.general.tooltip=General Settings
 commands.dimension.usage=/dimension <dimension number>
 commands.dimension.nodimension=No dimension registered with ID '%s'
 tile.redRock.name=Red Rock
+tile.yellowSand.name=Yellow Sand

@@ -7,5 +7,7 @@ public final class TRBlocks
 {
 
     public static Block redRock;
+    public static Block yellowSand;
+
 
 }
