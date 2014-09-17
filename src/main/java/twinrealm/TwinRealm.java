@@ -14,6 +14,7 @@ import org.apache.logging.log4j.Logger;
 import twinrealm.blocks.*;
 import twinrealm.blocks.TRBlocks;
 import twinrealm.configuration.TRConfig;
+import twinrealm.creativetab.TRCreativeTabs;
 import twinrealm.events.TREventHandlerFML;
 import twinrealm.events.TREventHandlerForge;
 import twinrealm.events.TREventHandlerTerrain;
@@ -66,11 +67,13 @@ public class TwinRealm
         eventHandlerTerrain = new TREventHandlerTerrain();
         eventHandlerTerrain.register();
 
-        registerBlocks();
-
         TRDimensions.twinRealm = DimensionManager.getNextFreeDimId();
         DimensionManager.registerProviderType(TRDimensions.twinRealmProviderType, WorldProviderTwinRealm.class, true);
         DimensionManager.registerDimension(TRDimensions.twinRealm, TRDimensions.twinRealmProviderType);
+
+        TRCreativeTabs.init();
+
+        registerBlocks();
     }
 
     @Mod.EventHandler

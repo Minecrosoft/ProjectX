@@ -5,6 +5,8 @@ trealm.configgui.ctgy.general.tooltip=General Settings
 commands.dimension.usage=/dimension <dimension number>
 commands.dimension.nodimension=No dimension registered with ID '%s'
 
+itemGroup.trealm=Twin Realm
+
 tile.redRock.name=Red Rock
 tile.redDirt.name=Red Dirt
 tile.yellowSand.name=Yellow Sand
