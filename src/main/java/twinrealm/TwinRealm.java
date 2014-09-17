@@ -46,7 +46,7 @@ public class TwinRealm
     public static TREventHandlerFML eventHandlerFML;
     public static TREventHandlerTerrain eventHandlerTerrain;
 
-    public static String textureBase = "twinrealm:";
+    public static String textureBase = "trealm:";
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event)
