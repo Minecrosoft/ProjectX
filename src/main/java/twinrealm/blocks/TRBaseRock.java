@@ -13,7 +13,9 @@ public class TRBaseRock extends Block
     {
         super(Material.rock);
         this.setCreativeTab(TRCreativeTabs.tabGeneral);
-        this.setHardness(1F);
-        this.setResistance(1F);
+        this.setHardness(1.5F);
+        this.setResistance(10F);
+
+        setStepSound(soundTypePiston);
     }
 }

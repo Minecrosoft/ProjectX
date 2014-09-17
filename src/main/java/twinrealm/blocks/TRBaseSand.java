@@ -14,6 +14,7 @@ public class TRBaseSand extends Block
         super(Material.sand);
         this.setCreativeTab(TRCreativeTabs.tabGeneral);
         this.setHardness(.5F);
-        this.setResistance(.25F);
+
+        setStepSound(soundTypeSand);
     }
 }

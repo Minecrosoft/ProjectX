@@ -13,5 +13,8 @@ public class TRBaseDirt extends Block
     {
         super(Material.ground);
         this.setCreativeTab(TRCreativeTabs.tabGeneral);
+        setHardness(0.5F);
+
+        setStepSound(soundTypeGravel);
     }
 }
