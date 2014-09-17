@@ -5,9 +5,7 @@ import net.minecraft.block.Block;
  */
 public final class TRBlocks
 {
-
     public static Block redRock;
+    public static Block redDirt;
     public static Block yellowSand;
-
-
 }

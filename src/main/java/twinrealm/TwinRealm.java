@@ -91,14 +91,16 @@ public class TwinRealm
         event.registerServerCommand(new CommandSetDimension());
     }
 
-    private void registerBlocks() {
-
+    private void registerBlocks()
+    {
         TRBlocks.redRock = new TRBaseRock().setBlockName("redRock").setBlockTextureName(textureBase + "redRock");
         GameRegistry.registerBlock(TRBlocks.redRock, ItemBlock.class, "red_rock");
 
+        TRBlocks.redDirt = new TRBaseDirt().setBlockName("redDirt").setBlockTextureName(textureBase + "redDirt");
+        GameRegistry.registerBlock(TRBlocks.redDirt, ItemBlock.class, "red_dirt");
+
         TRBlocks.yellowSand = new TRBaseSand().setBlockName("yellowSand").setBlockTextureName(textureBase + "yellowSand");
         GameRegistry.registerBlock(TRBlocks.yellowSand, ItemBlock.class, "yellow_sand");
-
     }
 
 }
