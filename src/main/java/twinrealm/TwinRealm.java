@@ -21,6 +21,7 @@ import twinrealm.events.TREventHandlerTerrain;
 import twinrealm.server.commands.CommandSetDimension;
 import twinrealm.worldgen.TRDimensions;
 import twinrealm.worldgen.WorldProviderTwinRealm;
+import twinrealm.worldgen.biomes.TRBiomeGenBase;
 
 /**
  * Created by lukas on 15.09.14.
@@ -72,6 +73,8 @@ public class TwinRealm
         DimensionManager.registerDimension(TRDimensions.twinRealm, TRDimensions.twinRealmProviderType);
 
         TRCreativeTabs.init();
+
+        TRBiomeGenBase.init();
 
         registerBlocks();
     }

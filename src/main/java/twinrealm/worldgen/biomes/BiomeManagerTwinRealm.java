@@ -22,14 +22,14 @@ public class BiomeManagerTwinRealm
 
     static
     {
-        warmBiomes.add(new BiomeEntry(BiomeGenBase.forest, 10));
+        warmBiomes.add(new BiomeEntry(TRBiomeGenBase.crudeWoods, 10));
 //        warmBiomes.add(new BiomeEntry(BiomeGenBase.roofedForest, 10));
 //        warmBiomes.add(new BiomeEntry(BiomeGenBase.extremeHills, 10));
 //        warmBiomes.add(new BiomeEntry(BiomeGenBase.plains, 10));
 //        warmBiomes.add(new BiomeEntry(BiomeGenBase.birchForest, 10));
 //        warmBiomes.add(new BiomeEntry(BiomeGenBase.swampland, 10));
 
-        coolBiomes.add(new BiomeEntry(BiomeGenBase.forest, 10));
+        coolBiomes.add(new BiomeEntry(TRBiomeGenBase.crudeWoods, 10));
 //        coolBiomes.add(new BiomeEntry(BiomeGenBase.extremeHills, 10));
 //        coolBiomes.add(new BiomeEntry(BiomeGenBase.taiga, 10));
 //        coolBiomes.add(new BiomeEntry(BiomeGenBase.plains, 10));
