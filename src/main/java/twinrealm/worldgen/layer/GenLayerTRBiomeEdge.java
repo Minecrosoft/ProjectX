@@ -16,137 +16,137 @@ public class GenLayerTRBiomeEdge extends GenLayer
     }
 
     @Override
-    public int[] getInts(int p_75904_1_, int p_75904_2_, int p_75904_3_, int p_75904_4_)
+    public int[] getInts(int x, int z, int width, int depth)
     {
-        int[] aint = this.parent.getInts(p_75904_1_ - 1, p_75904_2_ - 1, p_75904_3_ + 2, p_75904_4_ + 2);
-        int[] aint1 = IntCache.getIntCache(p_75904_3_ * p_75904_4_);
+        int[] parentValues = this.parent.getInts(x - 1, z - 1, width + 2, depth + 2);
+        int[] biomeValues = IntCache.getIntCache(width * depth);
 
-        for (int i1 = 0; i1 < p_75904_4_; ++i1)
+        for (int zPlus = 0; zPlus < depth; ++zPlus)
         {
-            for (int j1 = 0; j1 < p_75904_3_; ++j1)
+            for (int xPlus = 0; xPlus < width; ++xPlus)
             {
-                this.initChunkSeed((long)(j1 + p_75904_1_), (long)(i1 + p_75904_2_));
-                int k1 = aint[j1 + 1 + (i1 + 1) * (p_75904_3_ + 2)];
+                this.initChunkSeed((long)(xPlus + x), (long)(zPlus + z));
+                int parentValue = parentValues[xPlus + 1 + (zPlus + 1) * (width + 2)];
 
-                if (!this.func_151636_a(aint, aint1, j1, i1, p_75904_3_, k1, BiomeGenBase.extremeHills.biomeID, BiomeGenBase.extremeHillsEdge.biomeID) && !this.func_151635_b(aint, aint1, j1, i1, p_75904_3_, k1, BiomeGenBase.mesaPlateau_F.biomeID, BiomeGenBase.mesa.biomeID) && !this.func_151635_b(aint, aint1, j1, i1, p_75904_3_, k1, BiomeGenBase.mesaPlateau.biomeID, BiomeGenBase.mesa.biomeID) && !this.func_151635_b(aint, aint1, j1, i1, p_75904_3_, k1, BiomeGenBase.megaTaiga.biomeID, BiomeGenBase.taiga.biomeID))
+                if (!this.replaceBiomeEdgeIfNecessary(parentValues, biomeValues, xPlus, zPlus, width, parentValue, BiomeGenBase.extremeHills.biomeID, BiomeGenBase.extremeHillsEdge.biomeID) && !this.replaceBiomeEdgeCompletely(parentValues, biomeValues, xPlus, zPlus, width, parentValue, BiomeGenBase.mesaPlateau_F.biomeID, BiomeGenBase.mesa.biomeID) && !this.replaceBiomeEdgeCompletely(parentValues, biomeValues, xPlus, zPlus, width, parentValue, BiomeGenBase.mesaPlateau.biomeID, BiomeGenBase.mesa.biomeID) && !this.replaceBiomeEdgeCompletely(parentValues, biomeValues, xPlus, zPlus, width, parentValue, BiomeGenBase.megaTaiga.biomeID, BiomeGenBase.taiga.biomeID))
                 {
-                    int l1;
-                    int i2;
-                    int j2;
-                    int k2;
+                    int valZNeg;
+                    int valXPos;
+                    int valXNeg;
+                    int valZPos;
 
-                    if (k1 == BiomeGenBase.desert.biomeID)
+                    if (parentValue == BiomeGenBase.desert.biomeID)
                     {
-                        l1 = aint[j1 + 1 + (i1 + 1 - 1) * (p_75904_3_ + 2)];
-                        i2 = aint[j1 + 1 + 1 + (i1 + 1) * (p_75904_3_ + 2)];
-                        j2 = aint[j1 + 1 - 1 + (i1 + 1) * (p_75904_3_ + 2)];
-                        k2 = aint[j1 + 1 + (i1 + 1 + 1) * (p_75904_3_ + 2)];
+                        valZNeg = parentValues[xPlus + 1 + (zPlus + 1 - 1) * (width + 2)];
+                        valXPos = parentValues[xPlus + 1 + 1 + (zPlus + 1) * (width + 2)];
+                        valXNeg = parentValues[xPlus + 1 - 1 + (zPlus + 1) * (width + 2)];
+                        valZPos = parentValues[xPlus + 1 + (zPlus + 1 + 1) * (width + 2)];
 
-                        if (l1 != BiomeGenBase.icePlains.biomeID && i2 != BiomeGenBase.icePlains.biomeID && j2 != BiomeGenBase.icePlains.biomeID && k2 != BiomeGenBase.icePlains.biomeID)
+                        if (valZNeg != BiomeGenBase.icePlains.biomeID && valXPos != BiomeGenBase.icePlains.biomeID && valXNeg != BiomeGenBase.icePlains.biomeID && valZPos != BiomeGenBase.icePlains.biomeID)
                         {
-                            aint1[j1 + i1 * p_75904_3_] = k1;
+                            biomeValues[xPlus + zPlus * width] = parentValue;
                         }
                         else
                         {
-                            aint1[j1 + i1 * p_75904_3_] = BiomeGenBase.extremeHillsPlus.biomeID;
+                            biomeValues[xPlus + zPlus * width] = BiomeGenBase.extremeHillsPlus.biomeID;
                         }
                     }
-                    else if (k1 == BiomeGenBase.swampland.biomeID)
+                    else if (parentValue == BiomeGenBase.swampland.biomeID)
                     {
-                        l1 = aint[j1 + 1 + (i1 + 1 - 1) * (p_75904_3_ + 2)];
-                        i2 = aint[j1 + 1 + 1 + (i1 + 1) * (p_75904_3_ + 2)];
-                        j2 = aint[j1 + 1 - 1 + (i1 + 1) * (p_75904_3_ + 2)];
-                        k2 = aint[j1 + 1 + (i1 + 1 + 1) * (p_75904_3_ + 2)];
+                        valZNeg = parentValues[xPlus + 1 + (zPlus + 1 - 1) * (width + 2)];
+                        valXPos = parentValues[xPlus + 1 + 1 + (zPlus + 1) * (width + 2)];
+                        valXNeg = parentValues[xPlus + 1 - 1 + (zPlus + 1) * (width + 2)];
+                        valZPos = parentValues[xPlus + 1 + (zPlus + 1 + 1) * (width + 2)];
 
-                        if (l1 != BiomeGenBase.desert.biomeID && i2 != BiomeGenBase.desert.biomeID && j2 != BiomeGenBase.desert.biomeID && k2 != BiomeGenBase.desert.biomeID && l1 != BiomeGenBase.coldTaiga.biomeID && i2 != BiomeGenBase.coldTaiga.biomeID && j2 != BiomeGenBase.coldTaiga.biomeID && k2 != BiomeGenBase.coldTaiga.biomeID && l1 != BiomeGenBase.icePlains.biomeID && i2 != BiomeGenBase.icePlains.biomeID && j2 != BiomeGenBase.icePlains.biomeID && k2 != BiomeGenBase.icePlains.biomeID)
+                        if (valZNeg != BiomeGenBase.desert.biomeID && valXPos != BiomeGenBase.desert.biomeID && valXNeg != BiomeGenBase.desert.biomeID && valZPos != BiomeGenBase.desert.biomeID && valZNeg != BiomeGenBase.coldTaiga.biomeID && valXPos != BiomeGenBase.coldTaiga.biomeID && valXNeg != BiomeGenBase.coldTaiga.biomeID && valZPos != BiomeGenBase.coldTaiga.biomeID && valZNeg != BiomeGenBase.icePlains.biomeID && valXPos != BiomeGenBase.icePlains.biomeID && valXNeg != BiomeGenBase.icePlains.biomeID && valZPos != BiomeGenBase.icePlains.biomeID)
                         {
-                            if (l1 != BiomeGenBase.jungle.biomeID && k2 != BiomeGenBase.jungle.biomeID && i2 != BiomeGenBase.jungle.biomeID && j2 != BiomeGenBase.jungle.biomeID)
+                            if (valZNeg != BiomeGenBase.jungle.biomeID && valZPos != BiomeGenBase.jungle.biomeID && valXPos != BiomeGenBase.jungle.biomeID && valXNeg != BiomeGenBase.jungle.biomeID)
                             {
-                                aint1[j1 + i1 * p_75904_3_] = k1;
+                                biomeValues[xPlus + zPlus * width] = parentValue;
                             }
                             else
                             {
-                                aint1[j1 + i1 * p_75904_3_] = BiomeGenBase.jungleEdge.biomeID;
+                                biomeValues[xPlus + zPlus * width] = BiomeGenBase.jungleEdge.biomeID;
                             }
                         }
                         else
                         {
-                            aint1[j1 + i1 * p_75904_3_] = BiomeGenBase.plains.biomeID;
+                            biomeValues[xPlus + zPlus * width] = BiomeGenBase.plains.biomeID;
                         }
                     }
                     else
                     {
-                        aint1[j1 + i1 * p_75904_3_] = k1;
+                        biomeValues[xPlus + zPlus * width] = parentValue;
                     }
                 }
             }
         }
 
-        return aint1;
+        return biomeValues;
     }
 
-    private boolean func_151636_a(int[] p_151636_1_, int[] p_151636_2_, int p_151636_3_, int p_151636_4_, int p_151636_5_, int p_151636_6_, int p_151636_7_, int p_151636_8_)
+    private boolean replaceBiomeEdgeIfNecessary(int[] parentValues, int[] biomeValues, int x, int z, int width, int currentValue, int sourceBiome, int replaceBiome)
     {
-        if (!compareBiomesById(p_151636_6_, p_151636_7_))
+        if (!compareBiomesById(currentValue, sourceBiome))
         {
             return false;
         }
         else
         {
-            int k1 = p_151636_1_[p_151636_3_ + 1 + (p_151636_4_ + 1 - 1) * (p_151636_5_ + 2)];
-            int l1 = p_151636_1_[p_151636_3_ + 1 + 1 + (p_151636_4_ + 1) * (p_151636_5_ + 2)];
-            int i2 = p_151636_1_[p_151636_3_ + 1 - 1 + (p_151636_4_ + 1) * (p_151636_5_ + 2)];
-            int j2 = p_151636_1_[p_151636_3_ + 1 + (p_151636_4_ + 1 + 1) * (p_151636_5_ + 2)];
+            int k1 = parentValues[x + 1 + (z + 1 - 1) * (width + 2)];
+            int l1 = parentValues[x + 1 + 1 + (z + 1) * (width + 2)];
+            int i2 = parentValues[x + 1 - 1 + (z + 1) * (width + 2)];
+            int j2 = parentValues[x + 1 + (z + 1 + 1) * (width + 2)];
 
-            if (this.func_151634_b(k1, p_151636_7_) && this.func_151634_b(l1, p_151636_7_) && this.func_151634_b(i2, p_151636_7_) && this.func_151634_b(j2, p_151636_7_))
+            if (this.canBiomesBeNeighbors(k1, sourceBiome) && this.canBiomesBeNeighbors(l1, sourceBiome) && this.canBiomesBeNeighbors(i2, sourceBiome) && this.canBiomesBeNeighbors(j2, sourceBiome))
             {
-                p_151636_2_[p_151636_3_ + p_151636_4_ * p_151636_5_] = p_151636_6_;
+                biomeValues[x + z * width] = currentValue;
             }
             else
             {
-                p_151636_2_[p_151636_3_ + p_151636_4_ * p_151636_5_] = p_151636_8_;
+                biomeValues[x + z * width] = replaceBiome;
             }
 
             return true;
         }
     }
 
-    private boolean func_151635_b(int[] p_151635_1_, int[] p_151635_2_, int p_151635_3_, int p_151635_4_, int p_151635_5_, int p_151635_6_, int p_151635_7_, int p_151635_8_)
+    private boolean replaceBiomeEdgeCompletely(int[] parentValues, int[] biomeValues, int x, int z, int width, int currentValue, int sourceBiome, int replaceBiome)
     {
-        if (p_151635_6_ != p_151635_7_)
+        if (currentValue != sourceBiome)
         {
             return false;
         }
         else
         {
-            int k1 = p_151635_1_[p_151635_3_ + 1 + (p_151635_4_ + 1 - 1) * (p_151635_5_ + 2)];
-            int l1 = p_151635_1_[p_151635_3_ + 1 + 1 + (p_151635_4_ + 1) * (p_151635_5_ + 2)];
-            int i2 = p_151635_1_[p_151635_3_ + 1 - 1 + (p_151635_4_ + 1) * (p_151635_5_ + 2)];
-            int j2 = p_151635_1_[p_151635_3_ + 1 + (p_151635_4_ + 1 + 1) * (p_151635_5_ + 2)];
+            int k1 = parentValues[x + 1 + (z + 1 - 1) * (width + 2)];
+            int l1 = parentValues[x + 1 + 1 + (z + 1) * (width + 2)];
+            int i2 = parentValues[x + 1 - 1 + (z + 1) * (width + 2)];
+            int j2 = parentValues[x + 1 + (z + 1 + 1) * (width + 2)];
 
-            if (compareBiomesById(k1, p_151635_7_) && compareBiomesById(l1, p_151635_7_) && compareBiomesById(i2, p_151635_7_) && compareBiomesById(j2, p_151635_7_))
+            if (compareBiomesById(k1, sourceBiome) && compareBiomesById(l1, sourceBiome) && compareBiomesById(i2, sourceBiome) && compareBiomesById(j2, sourceBiome))
             {
-                p_151635_2_[p_151635_3_ + p_151635_4_ * p_151635_5_] = p_151635_6_;
+                biomeValues[x + z * width] = currentValue;
             }
             else
             {
-                p_151635_2_[p_151635_3_ + p_151635_4_ * p_151635_5_] = p_151635_8_;
+                biomeValues[x + z * width] = replaceBiome;
             }
 
             return true;
         }
     }
 
-    private boolean func_151634_b(int p_151634_1_, int p_151634_2_)
+    private boolean canBiomesBeNeighbors(int biome1, int biome2)
     {
-        if (compareBiomesById(p_151634_1_, p_151634_2_))
+        if (compareBiomesById(biome1, biome2))
         {
             return true;
         }
-        else if (BiomeGenBase.getBiome(p_151634_1_) != null && BiomeGenBase.getBiome(p_151634_2_) != null)
+        else if (BiomeGenBase.getBiome(biome1) != null && BiomeGenBase.getBiome(biome2) != null)
         {
-            BiomeGenBase.TempCategory tempcategory = BiomeGenBase.getBiome(p_151634_1_).getTempCategory();
-            BiomeGenBase.TempCategory tempcategory1 = BiomeGenBase.getBiome(p_151634_2_).getTempCategory();
+            BiomeGenBase.TempCategory tempcategory = BiomeGenBase.getBiome(biome1).getTempCategory();
+            BiomeGenBase.TempCategory tempcategory1 = BiomeGenBase.getBiome(biome2).getTempCategory();
             return tempcategory == tempcategory1 || tempcategory == BiomeGenBase.TempCategory.MEDIUM || tempcategory1 == BiomeGenBase.TempCategory.MEDIUM;
         }
         else
