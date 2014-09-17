@@ -57,44 +57,45 @@ public class GenLayerTRBiome extends GenLayer
                 }
                 else if (parentValue == BiomeGenBase.mushroomIsland.biomeID)
                 {
-                    biomeValues[index] = parentValue;
+//                    biomeValues[index] = parentValue;
+                    biomeValues[index] = ((BiomeManager.BiomeEntry)WeightedRandom.getItem(this.warmBiomes, (int)(this.nextLong(WeightedRandom.getTotalWeight(this.warmBiomes) / 10) * 10))).biome.biomeID;
                 }
                 else if (parentValue == 1)
                 {
-                    if (specialBiomeBit > 0)
-                    {
-                        if (this.nextInt(3) == 0)
-                        {
-                            biomeValues[index] = BiomeGenBase.mesaPlateau.biomeID;
-                        }
-                        else
-                        {
-                            biomeValues[index] = BiomeGenBase.mesaPlateau_F.biomeID;
-                        }
-                    }
-                    else
+//                    if (specialBiomeBit > 0)
+//                    {
+//                        if (this.nextInt(3) == 0)
+//                        {
+//                            biomeValues[index] = BiomeGenBase.mesaPlateau.biomeID;
+//                        }
+//                        else
+//                        {
+//                            biomeValues[index] = BiomeGenBase.mesaPlateau_F.biomeID;
+//                        }
+//                    }
+//                    else
                     {
                         biomeValues[index] = ((BiomeManager.BiomeEntry) WeightedRandom.getItem(this.desertBiomes, (int) (this.nextLong(WeightedRandom.getTotalWeight(this.desertBiomes) / 10) * 10))).biome.biomeID;
                     }
                 }
                 else if (parentValue == 2)
                 {
-                    if (specialBiomeBit > 0)
-                    {
-                        biomeValues[index] = BiomeGenBase.jungle.biomeID;
-                    }
-                    else
+//                    if (specialBiomeBit > 0)
+//                    {
+//                        biomeValues[index] = BiomeGenBase.jungle.biomeID;
+//                    }
+//                    else
                     {
                         biomeValues[index] = ((BiomeManager.BiomeEntry)WeightedRandom.getItem(this.warmBiomes, (int)(this.nextLong(WeightedRandom.getTotalWeight(this.warmBiomes) / 10) * 10))).biome.biomeID;
                     }
                 }
                 else if (parentValue == 3)
                 {
-                    if (specialBiomeBit > 0)
-                    {
-                        biomeValues[index] = BiomeGenBase.megaTaiga.biomeID;
-                    }
-                    else
+//                    if (specialBiomeBit > 0)
+//                    {
+//                        biomeValues[index] = BiomeGenBase.megaTaiga.biomeID;
+//                    }
+//                    else
                     {
                         biomeValues[index] = ((BiomeManager.BiomeEntry)WeightedRandom.getItem(this.coolBiomes, (int)(this.nextLong(WeightedRandom.getTotalWeight(this.coolBiomes) / 10) * 10))).biome.biomeID;
                     }
@@ -105,7 +106,8 @@ public class GenLayerTRBiome extends GenLayer
                 }
                 else
                 {
-                    biomeValues[index] = BiomeGenBase.mushroomIsland.biomeID;
+//                    biomeValues[index] = BiomeGenBase.mushroomIsland.biomeID;
+                    biomeValues[index] = ((BiomeManager.BiomeEntry)WeightedRandom.getItem(this.warmBiomes, (int)(this.nextLong(WeightedRandom.getTotalWeight(this.warmBiomes) / 10) * 10))).biome.biomeID;
                 }
             }
         }
