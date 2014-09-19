@@ -20,9 +20,8 @@ public class GenLayerTwinRealm
         genlayeraddisland = new GenLayerAddIsland(70L, genlayeraddisland);
         GenLayerRemoveTooMuchOcean genlayerremovetoomuchocean = new GenLayerRemoveTooMuchOcean(2L, genlayeraddisland);
 
-//        GenLayerAddSnow genlayeraddsnow = new GenLayerAddSnow(2L, genlayerremovetoomuchocean);
-//        genlayeraddisland = new GenLayerAddIsland(3L, genlayeraddsnow);
-        genlayeraddisland = new GenLayerAddIsland(3L, genlayerremovetoomuchocean);
+        GenLayerAddSnow genlayeraddsnow = new GenLayerAddSnow(2L, genlayerremovetoomuchocean);
+        genlayeraddisland = new GenLayerAddIsland(3L, genlayeraddsnow);
 
         GenLayerEdge genlayeredge = new GenLayerEdge(2L, genlayeraddisland, GenLayerEdge.Mode.COOL_WARM);
         genlayeredge = new GenLayerEdge(2L, genlayeredge, GenLayerEdge.Mode.HEAT_ICE);

@@ -7,6 +7,7 @@ import net.minecraft.world.gen.layer.GenLayer;
 import net.minecraft.world.gen.layer.IntCache;
 import net.minecraftforge.common.BiomeManager;
 import twinrealm.worldgen.biomes.BiomeManagerTwinRealm;
+import twinrealm.worldgen.biomes.TRBiomeGenBase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +54,8 @@ public class GenLayerTRBiome extends GenLayer
 
                 if (isBiomeOceanic(parentValue))
                 {
-                    biomeValues[index] = parentValue;
+//                    biomeValues[index] = parentValue;
+                    biomeValues[index] = TRBiomeGenBase.ocean.biomeID;
                 }
                 else if (parentValue == BiomeGenBase.mushroomIsland.biomeID)
                 {
