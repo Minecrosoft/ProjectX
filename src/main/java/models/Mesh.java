@@ -18,9 +18,40 @@
 
 package models;
 
+import models.data.*;
+
+import java.nio.FloatBuffer;
+import java.nio.ShortBuffer;
+
 /**
  * Created by lukas on 21.09.14.
  */
-public class Mesh
+public class Mesh implements Disposable
 {
+    final VertexData vertices;
+    final IndexData indices;
+
+    public Mesh(boolean isStatic, int maxVertices, int maxIndices, VertexAttributes attributes)
+    {
+        vertices = new VertexBufferObject(isStatic, maxVertices, attributes);
+        indices = new IndexBufferObject(isStatic, maxIndices);
+    }
+
+    @Override
+    public void dispose()
+    {
+        vertices.dispose();
+        indices.dispose();
+    }
+
+    public FloatBuffer getVerticesBuffer()
+    {
+        return vertices.getBuffer();
+    }
+
+
+    public ShortBuffer getIndicesBuffer()
+    {
+        return indices.getBuffer();
+    }
 }

@@ -15,7 +15,6 @@ public class TRClientProxy implements TRProxy
     public void registerRenderers()
     {
         Model model = MinecraftModelLoader.loadModelG3DJ(new ResourceLocation(TwinRealm.MODID, "models/Sphere.g3dj"));
-        System.out.println("model.id = " + model.id);
         System.out.println("model = " + model);
     }
 

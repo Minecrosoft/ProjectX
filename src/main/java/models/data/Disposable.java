@@ -16,23 +16,12 @@
  * limitations under the License.
  */
 
-package models;
-
-import models.data.Disposable;
-
-import java.util.ArrayList;
-import java.util.List;
+package models.data;
 
 /**
  * Created by lukas on 21.09.14.
  */
-public class Model
+public interface Disposable
 {
-    public final List<Material> materials = new ArrayList<>();
-    public final List<Node> nodes = new ArrayList<>();
-    public final List<Animation> animations = new ArrayList<>();
-    public final List<Mesh> meshes = new ArrayList<>();
-    public final List<MeshPart> meshParts = new ArrayList<>();
-
-    public final List<Disposable> disposables = new ArrayList<>();
+    void dispose();
 }

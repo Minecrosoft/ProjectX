@@ -20,6 +20,8 @@ package models.loaders;
 
 import models.Model;
 import net.minecraft.util.ResourceLocation;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -29,7 +31,8 @@ import java.io.InputStreamReader;
  */
 public class MinecraftModelLoader
 {
-    private static G3DModelLoader g3DModelLoader = new G3DModelLoader();
+    private static Logger logger = LogManager.getLogger("Models");
+    private static G3DModelLoader g3DModelLoader = new G3DModelLoader(logger);
 
     public static Model loadModelG3DJ(ResourceLocation resourceLocation)
     {
