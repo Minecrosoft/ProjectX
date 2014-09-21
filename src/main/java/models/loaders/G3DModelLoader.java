@@ -26,6 +26,7 @@ import models.loaders.data.QuaternionDeserializer;
 import models.loaders.data.Vector2fDeserializer;
 import models.loaders.data.Vector3fDeserializer;
 import models.loaders.g3draw.RawModel;
+import org.apache.logging.log4j.Logger;
 import org.lwjgl.util.vector.Quaternion;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
@@ -41,10 +42,13 @@ public class G3DModelLoader implements ModelLoader
     public static final short VERSION_HI = 0;
     public static final short VERSION_LO = 1;
 
+    private Logger logger;
     private Gson gson;
 
-    public G3DModelLoader()
+    public G3DModelLoader(Logger logger)
     {
+        this.logger = logger;
+
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(Color.class, new ColorDeserializer());
         gsonBuilder.registerTypeAdapter(Quaternion.class, new QuaternionDeserializer());
@@ -57,6 +61,15 @@ public class G3DModelLoader implements ModelLoader
     public Model createModel(Reader reader)
     {
         RawModel rawModel = gson.fromJson(reader, RawModel.class);
+
+        if (rawModel.version == null)
+            rawModel.version = new short[]{VERSION_HI, VERSION_LO};
+
+        if (rawModel.version[0] != VERSION_HI || rawModel.version[1] != VERSION_LO)
+        {
+            logger.error("Version number of g3d file unknown");
+            return null;
+        }
 
         Model model = new Model();
 
