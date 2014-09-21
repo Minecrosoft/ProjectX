@@ -18,17 +18,9 @@
 
 package models;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by lukas on 21.09.14.
  */
-public class Model
+public class Material
 {
-    public final List<Material> materials = new ArrayList<>();
-    public final List<Node> nodes = new ArrayList<>();
-    public final List<Animation> animations = new ArrayList<>();
-    public final List<Mesh> meshes = new ArrayList<>();
-    public final List<MeshPart> meshParts = new ArrayList<>();
 }

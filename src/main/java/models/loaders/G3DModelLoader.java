@@ -62,6 +62,11 @@ public class G3DModelLoader implements ModelLoader
     {
         RawModel rawModel = gson.fromJson(reader, RawModel.class);
 
+        return modelFromRawModel(rawModel, logger);
+    }
+
+    public static Model modelFromRawModel(RawModel rawModel, Logger logger)
+    {
         if (rawModel.version == null)
             rawModel.version = new short[]{VERSION_HI, VERSION_LO};
 
@@ -72,7 +77,6 @@ public class G3DModelLoader implements ModelLoader
         }
 
         Model model = new Model();
-
         return model;
     }
 }
