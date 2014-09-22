@@ -105,8 +105,11 @@ public class TwinRealm
         TRBlocks.redDirt = new TRBaseDirt().setBlockName("redDirt").setBlockTextureName(textureBase + "redDirt");
         GameRegistry.registerBlock(TRBlocks.redDirt, ItemBlock.class, "red_dirt");
 
-        TRBlocks.yellowSand = new TRBaseSand().setBlockName("yellowSand").setBlockTextureName(textureBase + "yellowSand");
-        GameRegistry.registerBlock(TRBlocks.yellowSand, ItemBlock.class, "yellow_sand");
+        TRBlocks.yellowDirt = new TRBaseSand().setBlockName("yellowDirt").setBlockTextureName(textureBase + "yellowDirt");
+        GameRegistry.registerBlock(TRBlocks.yellowDirt, ItemBlock.class, "yellow_dirt");
+
+        TRBlocks.limestone = new TRBaseRock().setBlockName("limestone").setBlockTextureName(textureBase + "limestone");
+        GameRegistry.registerBlock(TRBlocks.limestone, ItemBlock.class, "limestone");
     }
 
 }

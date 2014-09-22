@@ -16,6 +16,6 @@ public class TRBaseRock extends Block
         this.setHardness(1.5F);
         this.setResistance(10F);
 
-        setStepSound(soundTypePiston);
+        setStepSound(soundTypeStone);
     }
 }

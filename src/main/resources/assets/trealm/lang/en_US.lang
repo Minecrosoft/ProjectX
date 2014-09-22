@@ -9,4 +9,5 @@ itemGroup.trealm=Twin Realm
 
 tile.redRock.name=Red Rock
 tile.redDirt.name=Red Dirt
-tile.yellowSand.name=Yellow Sand
+tile.yellowDirt.name=Yellow Dirt
+tile.limestone.name=Limestone
