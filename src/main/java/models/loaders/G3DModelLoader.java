@@ -20,18 +20,14 @@ package models.loaders;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import models.Mesh;
-import models.MeshPart;
-import models.Model;
+import models.*;
 import models.data.VertexAttribute;
 import models.data.VertexAttributes;
 import models.loaders.data.ColorDeserializer;
 import models.loaders.data.QuaternionDeserializer;
 import models.loaders.data.Vector2fDeserializer;
 import models.loaders.data.Vector3fDeserializer;
-import models.loaders.g3draw.RawMesh;
-import models.loaders.g3draw.RawMeshPart;
-import models.loaders.g3draw.RawModel;
+import models.loaders.g3draw.*;
 import models.utils.BufferUtils;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.opengl.GL11;
@@ -41,8 +37,7 @@ import org.lwjgl.util.vector.Vector3f;
 
 import java.awt.*;
 import java.io.Reader;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 import java.util.List;
 
 /**
@@ -89,6 +84,7 @@ public class G3DModelLoader implements ModelLoader
 
         Model model = new Model();
         loadMeshes(model, Arrays.asList(rawModel.meshes));
+        loadNodes(model, Arrays.asList(rawModel.nodes));
         return model;
     }
 
@@ -103,22 +99,22 @@ public class G3DModelLoader implements ModelLoader
         }
     }
 
-    public static Mesh convertMesh(RawMesh modelMesh, List<MeshPart> meshParts)
+    public static Mesh convertMesh(RawMesh rawMesh, List<MeshPart> meshParts)
     {
         int numIndices = 0;
-        for (RawMeshPart part : modelMesh.parts)
+        for (RawMeshPart part : rawMesh.parts)
         {
             numIndices += part.indices.length;
         }
-        VertexAttributes attributes = new VertexAttributes(parseAttributes(modelMesh.attributes));
-        int numVertices = modelMesh.vertices.length / (attributes.vertexSize / 4);
+        VertexAttributes attributes = new VertexAttributes(parseAttributes(rawMesh.attributes));
+        int numVertices = rawMesh.vertices.length / (attributes.vertexSize / 4);
 
         Mesh mesh = new Mesh(true, numVertices, numIndices, attributes);
 
-        BufferUtils.copy(modelMesh.vertices, mesh.getVerticesBuffer(), modelMesh.vertices.length, 0);
+        BufferUtils.copy(rawMesh.vertices, mesh.getVerticesBuffer(), rawMesh.vertices.length, 0);
         int offset = 0;
         mesh.getIndicesBuffer().clear();
-        for (RawMeshPart part : modelMesh.parts)
+        for (RawMeshPart part : rawMesh.parts)
         {
             MeshPart meshPart = new MeshPart();
             meshPart.id = part.id;
@@ -134,32 +130,70 @@ public class G3DModelLoader implements ModelLoader
         return mesh;
     }
 
+    private static void loadNodes(Model model, Iterable<RawNode> rawNodes)
+    {
+        Map<String, Material> materials = new HashMap<>();
+
+        Map<String, MeshPart> meshParts = new HashMap<>();
+        for (MeshPart meshPart : model.meshParts)
+            meshParts.put(meshPart.id, meshPart);
+
+        for (RawNode rawNode : rawNodes)
+            model.nodes.add(convertNode(rawNode, materials, meshParts));
+    }
+
+    public static Node convertNode(RawNode rawNode, Map<String, Material> materials, Map<String, MeshPart> meshParts)
+    {
+        Node node = new Node();
+        node.id = rawNode.id;
+
+        if (rawNode.translation != null)
+            node.translation.set(rawNode.translation);
+
+        if (rawNode.rotation != null)
+            node.rotation.set(rawNode.rotation);
+
+        if (rawNode.scale != null)
+            node.scale.set(rawNode.scale);
+
+        if (rawNode.parts != null)
+            for (RawNodePart rawNodePart : rawNode.parts)
+                node.parts.add(convertNodePart(rawNodePart, materials, meshParts));
+
+        if (rawNode.children != null)
+            for (RawNode child : rawNode.children)
+                node.children.add(convertNode(child, materials, meshParts));
+
+        return node;
+    }
+
+    public static NodePart convertNodePart(RawNodePart rawNodePart, Map<String, Material> materials, Map<String, MeshPart> meshParts)
+    {
+        NodePart nodePart = new NodePart();
+
+        nodePart.meshPart = meshParts.get(rawNodePart.meshpartid);
+        nodePart.material = materials.get(rawNodePart.materialid);
+
+        return nodePart;
+    }
+
     private static int parseGLType(String type)
     {
-        if (type.equals("TRIANGLES"))
+        switch (type)
         {
-            return GL11.GL_TRIANGLES;
-        }
-        else if (type.equals("LINES"))
-        {
-            return GL11.GL_LINES;
-        }
-        else if (type.equals("POINTS"))
-        {
-            return GL11.GL_POINTS;
-        }
-        else if (type.equals("TRIANGLE_STRIP"))
-        {
-            return GL11.GL_TRIANGLE_STRIP;
-        }
-        else if (type.equals("LINE_STRIP"))
-        {
-            return GL11.GL_LINE_STRIP;
-        }
-        else
-        {
-            throw new RuntimeException("Unknown primitive type '" + type
-                    + "', should be one of triangle, trianglestrip, line, linestrip, lineloop or point");
+            case "TRIANGLES":
+                return GL11.GL_TRIANGLES;
+            case "LINES":
+                return GL11.GL_LINES;
+            case "POINTS":
+                return GL11.GL_POINTS;
+            case "TRIANGLE_STRIP":
+                return GL11.GL_TRIANGLE_STRIP;
+            case "LINE_STRIP":
+                return GL11.GL_LINE_STRIP;
+            default:
+                throw new RuntimeException("Unknown primitive type '" + type
+                        + "', should be one of triangle, trianglestrip, line, linestrip, lineloop or point");
         }
     }
 

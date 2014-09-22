@@ -19,6 +19,7 @@
 package models.data;
 
 import models.utils.BufferUtils;
+import net.minecraft.client.renderer.GLAllocation;
 
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
@@ -53,7 +54,7 @@ public class VertexArray implements VertexData {
 	 * @param attributes the {@link VertexAttributes} */
 	public VertexArray (int numVertices, VertexAttributes attributes) {
 		this.attributes = attributes;
-		byteBuffer = ByteBuffer.allocate(this.attributes.vertexSize * numVertices);
+		byteBuffer = GLAllocation.createDirectByteBuffer(this.attributes.vertexSize * numVertices);
 		buffer = byteBuffer.asFloatBuffer();
 		buffer.flip();
 		byteBuffer.flip();

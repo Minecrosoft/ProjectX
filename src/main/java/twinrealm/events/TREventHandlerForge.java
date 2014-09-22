@@ -1,25 +1,30 @@
 package twinrealm.events;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import models.Mesh;
-import models.MeshPart;
-import models.Model;
+import models.*;
 import models.data.IndexData;
 import models.data.VertexAttribute;
 import models.data.VertexAttributes;
 import models.data.VertexData;
 import models.loaders.MinecraftModelLoader;
+import models.utils.BufferUtils;
+import models.utils.MathUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelChicken;
+import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.common.MinecraftForge;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
+import org.lwjgl.util.vector.Matrix4f;
 import twinrealm.TwinRealm;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
+import java.util.Arrays;
 
 /**
  * Created by lukas on 15.09.14.
@@ -43,36 +48,53 @@ public class TREventHandlerForge
     {
 //        event.setCanceled(true);
 //
+//        GL11.glPushMatrix();
+//        GL11.glTranslated(event.x, event.y, event.z);
 //        drawModelDirectly(model);
+//        GL11.glPopMatrix();
     }
 
     public static void drawModelDirectly(Model model)
     {
         GL11.glDisable(GL11.GL_TEXTURE_2D);
         GL11.glColor3f(0.0f, 1.0f, 1.0f);
-////        Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation("textures/entity/chicken.png"));
-//        new ModelChicken().render(event.entity, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0625f);
 
-        for (MeshPart meshPart : model.meshParts)
+        for (Node node : model.nodes)
         {
-            Mesh mesh = meshPart.mesh;
-            IndexData indexData = mesh.getIndices();
-            ShortBuffer indexBuf = indexData.getBuffer();
+            GL11.glPushMatrix();
 
-            VertexData vertexData = mesh.getVertices();
-            FloatBuffer vertexBuf = vertexData.getBuffer();
+            Matrix4f nodeTransMat = new Matrix4f();
+            MathUtils.setTRS(nodeTransMat, node.translation, node.rotation, node.scale);
+            FloatBuffer nodeTransMatBuffer = GLAllocation.createDirectFloatBuffer(4 * 4);
+            nodeTransMat.store(nodeTransMatBuffer);
+            nodeTransMatBuffer.position(0);
+            GL11.glMultMatrix(nodeTransMatBuffer);
 
-            VertexAttributes vertexAttributes = vertexData.getAttributes();
-            VertexAttribute posAttr = vertexAttributes.findByUsage(VertexAttributes.Usage.Position);
-            int vertexLengthInFloats = vertexAttributes.vertexSize >> 2;
-
-            GL11.glBegin(meshPart.primitiveType);
-            for (int i = meshPart.indexOffset; i < meshPart.numVertices + meshPart.indexOffset; i++)
+            for (NodePart nodePart : node.parts)
             {
-                int index = indexBuf.get(i) * vertexLengthInFloats + posAttr.offset;
-                GL11.glVertex3f(vertexBuf.get(index), vertexBuf.get(index + 1), vertexBuf.get(index + 2));
+                MeshPart meshPart = nodePart.meshPart;
+
+                Mesh mesh = meshPart.mesh;
+                IndexData indexData = mesh.getIndices();
+                ShortBuffer indexBuf = indexData.getBuffer();
+
+                VertexData vertexData = mesh.getVertices();
+                FloatBuffer vertexBuf = vertexData.getBuffer();
+
+                VertexAttributes vertexAttributes = vertexData.getAttributes();
+                VertexAttribute posAttr = vertexAttributes.findByUsage(VertexAttributes.Usage.Position);
+                int vertexLengthInFloats = vertexAttributes.vertexSize >> 2;
+
+                GL11.glBegin(meshPart.primitiveType);
+                for (int i = meshPart.indexOffset; i < meshPart.numVertices + meshPart.indexOffset; i++)
+                {
+                    int index = indexBuf.get(i) * vertexLengthInFloats + posAttr.offset;
+                    GL11.glVertex3f(vertexBuf.get(index), vertexBuf.get(index + 1), vertexBuf.get(index + 2));
+                }
+                GL11.glEnd();
             }
-            GL11.glEnd();
+
+            GL11.glPopMatrix();
         }
 
         GL11.glEnable(GL11.GL_TEXTURE_2D);

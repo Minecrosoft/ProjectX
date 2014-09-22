@@ -55,4 +55,12 @@ public final class BufferUtils
         for (int index = 0; index < count; index ++)
             byteBuffer.putFloat(vertices[index + sourceOffset]);
     }
+
+    public static String toString(FloatBuffer floatBuffer)
+    {
+        StringBuilder builder = new StringBuilder();
+        for (int i = floatBuffer.position(); i < floatBuffer.limit(); i++)
+            builder.append(i == floatBuffer.position() ? "" : ", ").append(floatBuffer.get(i));
+        return builder.toString();
+    }
 }

@@ -18,6 +18,7 @@
 
 package models.data;
 
+import net.minecraft.client.renderer.GLAllocation;
 import org.lwjgl.opengl.GL15;
 
 import java.nio.ByteBuffer;
@@ -41,7 +42,7 @@ public class IndexBufferObject implements IndexData
      */
     public IndexBufferObject(boolean isStatic, int maxIndices)
     {
-        byteBuffer = ByteBuffer.allocate(maxIndices * 2);
+        byteBuffer = GLAllocation.createDirectByteBuffer(maxIndices * 2);
         isDirect = true;
 
         buffer = byteBuffer.asShortBuffer();
@@ -58,7 +59,7 @@ public class IndexBufferObject implements IndexData
      */
     public IndexBufferObject(int maxIndices)
     {
-        byteBuffer = ByteBuffer.allocate(maxIndices * 2);
+        byteBuffer = GLAllocation.createDirectByteBuffer(maxIndices * 2);
         this.isDirect = true;
 
         buffer = byteBuffer.asShortBuffer();

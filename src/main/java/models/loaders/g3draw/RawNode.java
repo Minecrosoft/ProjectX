@@ -24,11 +24,9 @@ import org.lwjgl.util.vector.Vector3f;
 public class RawNode
 {
 	public String id;
-	public int boneId = -1;
 	public Vector3f translation;
 	public Quaternion rotation;
 	public Vector3f scale;
-	public String meshId;
 	public RawNodePart[] parts;
 	public RawNode[] children;
 }

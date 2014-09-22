@@ -19,6 +19,7 @@
 package models.data;
 
 import models.utils.BufferUtils;
+import net.minecraft.client.renderer.GLAllocation;
 import org.lwjgl.opengl.GL15;
 
 import java.nio.ByteBuffer;
@@ -84,7 +85,7 @@ public class VertexBufferObject implements VertexData
         this.isStatic = isStatic;
         this.attributes = attributes;
 
-        byteBuffer = ByteBuffer.allocate(this.attributes.vertexSize * numVertices);
+        byteBuffer = GLAllocation.createDirectByteBuffer(this.attributes.vertexSize * numVertices);
         buffer = byteBuffer.asFloatBuffer();
         buffer.flip();
         byteBuffer.flip();
