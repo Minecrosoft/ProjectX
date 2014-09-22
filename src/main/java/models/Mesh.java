@@ -28,8 +28,8 @@ import java.nio.ShortBuffer;
  */
 public class Mesh implements Disposable
 {
-    final VertexData vertices;
-    final IndexData indices;
+    private final VertexData vertices;
+    private final IndexData indices;
 
     public Mesh(boolean isStatic, int maxVertices, int maxIndices, VertexAttributes attributes)
     {
@@ -53,5 +53,15 @@ public class Mesh implements Disposable
     public ShortBuffer getIndicesBuffer()
     {
         return indices.getBuffer();
+    }
+
+    public VertexData getVertices()
+    {
+        return vertices;
+    }
+
+    public IndexData getIndices()
+    {
+        return indices;
     }
 }
