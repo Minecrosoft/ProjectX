@@ -89,6 +89,7 @@ public class G3DModelLoader implements ModelLoader
         loadMeshes(model, Arrays.asList(g3DModel.meshes));
         loadMaterials(model, Arrays.asList(g3DModel.materials));
         loadNodes(model, Arrays.asList(g3DModel.nodes));
+        loadAnimations(model, Arrays.asList(g3DModel.animations));
         return model;
     }
 
@@ -134,7 +135,7 @@ public class G3DModelLoader implements ModelLoader
         return mesh;
     }
 
-    private static void loadNodes(Model model, Iterable<G3DNode> rawNodes)
+    private static void loadNodes(Model model, Iterable<G3DNode> g3DNodes)
     {
         Map<String, Material> materials = new HashMap<>();
         for (Material material : model.materials)
@@ -144,7 +145,7 @@ public class G3DModelLoader implements ModelLoader
         for (MeshPart meshPart : model.meshParts)
             meshParts.put(meshPart.id, meshPart);
 
-        for (G3DNode g3DNode : rawNodes)
+        for (G3DNode g3DNode : g3DNodes)
             model.nodes.add(convertNode(g3DNode, materials, meshParts));
     }
 
@@ -214,6 +215,63 @@ public class G3DModelLoader implements ModelLoader
             material.set(new BlendingAttribute(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, g3DMaterial.opacity));
 
         return material;
+    }
+
+    private static void loadAnimations(Model model, List<G3DAnimation> animations)
+    {
+        Map<String, Node> nodes = new HashMap<>();
+        for (Node node : model.nodes)
+            nodes.put(node.id, node);
+
+        for (G3DAnimation animation : animations)
+            model.animations.add(convertAnimation(animation, nodes));
+    }
+
+    public static Animation convertAnimation(G3DAnimation g3DAnimation, Map<String, Node> nodes)
+    {
+        Animation animation = new Animation();
+
+        animation.id = g3DAnimation.id;
+
+        for (G3DNodeAnimation nodeAnimation : g3DAnimation.bones)
+            animation.nodeAnimations.add(convertNodeAnimation(nodeAnimation, nodes));
+
+        float highestKeytime = 0.0f;
+        for (NodeAnimation nodeAnimation : animation.nodeAnimations)
+        {
+            for (NodeKeyframe nodeKeyframe : nodeAnimation.keyframes)
+            {
+                if (nodeKeyframe.keytime > highestKeytime)
+                    highestKeytime = nodeKeyframe.keytime;
+            }
+        }
+        animation.duration = highestKeytime;
+
+        return animation;
+    }
+
+    public static NodeAnimation convertNodeAnimation(G3DNodeAnimation g3DNodeAnimation, Map<String, Node> nodes)
+    {
+        NodeAnimation nodeAnimation = new NodeAnimation();
+
+        nodeAnimation.node = nodes.get(g3DNodeAnimation.boneId);
+
+        for (G3DKeyframe keyframe : g3DNodeAnimation.keyframes)
+            nodeAnimation.keyframes.add(convertKeyframe(keyframe));
+
+        return nodeAnimation;
+    }
+
+    public static NodeKeyframe convertKeyframe(G3DKeyframe g3DKeyframe)
+    {
+        NodeKeyframe keyframe = new NodeKeyframe();
+
+        keyframe.keytime = g3DKeyframe.keytime;
+        keyframe.rotation = g3DKeyframe.rotation;
+        keyframe.translation = g3DKeyframe.translation;
+        keyframe.scale = g3DKeyframe.scale;
+
+        return keyframe;
     }
 
     private static int parseGLDrawMode(String type)

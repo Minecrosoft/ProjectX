@@ -16,10 +16,22 @@
  * limitations under the License.
  */
 
-package models.loaders.g3d;
+package models;
 
-public class G3DNodeAnimation
+import org.lwjgl.util.vector.Quaternion;
+import org.lwjgl.util.vector.Vector3f;
+
+/**
+ * Created by lukas on 22.09.14.
+ */
+public class NodeKeyframe
 {
-	public String boneId;
-	public G3DKeyframe[] keyframes;
+    /** the timestamp of this keyframe **/
+    public float keytime;
+    /** the translation, given in local space, relative to the parent **/
+    public Vector3f translation;
+    /** the scale, given in local space relative to the parent **/
+    public Vector3f scale;
+    /** the rotation, given in local space, relative to the parent **/
+    public Quaternion rotation;
 }

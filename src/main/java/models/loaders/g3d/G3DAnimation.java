@@ -21,5 +21,5 @@ package models.loaders.g3d;
 public class G3DAnimation
 {
 	public String id;
-	public G3DNodeAnimation[] nodeAnimations;
+	public G3DNodeAnimation[] bones;
 }

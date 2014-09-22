@@ -16,13 +16,18 @@
  * limitations under the License.
  */
 
-package models.loaders.g3d;
+package models;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Created by lukas on 21.09.14.
+ * Created by lukas on 22.09.14.
  */
-public class G3DBoneAnimation
+public class NodeAnimation
 {
-    public String boneId;
-    public G3DKeyframe[] keyframes;
+    /** the Node affected by this animation **/
+    public Node node;
+    /** the keyframes, sorted by time, ascending **/
+    public List<NodeKeyframe> keyframes = new ArrayList<>();
 }

@@ -18,9 +18,18 @@
 
 package models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by lukas on 21.09.14.
  */
 public class Animation
 {
+    /** the unique id of the animation **/
+    public String id;
+    /** the duration in seconds **/
+    public float duration;
+    /** the animation curves for individual nodes **/
+    public List<NodeAnimation> nodeAnimations = new ArrayList<>();
 }

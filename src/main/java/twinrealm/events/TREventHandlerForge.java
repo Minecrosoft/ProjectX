@@ -21,7 +21,7 @@ public class TREventHandlerForge
 
     public TREventHandlerForge()
     {
-        model = MinecraftModelLoader.loadModelG3DJ(new ResourceLocation(TwinRealm.MODID, "models/Barrel.g3dj"));
+        model = MinecraftModelLoader.loadModelG3DJ(new ResourceLocation(TwinRealm.MODID, "models/Icosphere.g3dj"));
     }
 
     public void register()

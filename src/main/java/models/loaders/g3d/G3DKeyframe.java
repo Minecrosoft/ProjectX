@@ -19,6 +19,7 @@
 package models.loaders.g3d;
 
 import org.lwjgl.util.vector.Quaternion;
+import org.lwjgl.util.vector.Vector3f;
 
 /**
  * Created by lukas on 21.09.14.
@@ -27,6 +28,6 @@ public class G3DKeyframe
 {
     public float keytime;
     public Quaternion rotation;
-    public float[] translation;
-    public float[] scale;
+    public Vector3f translation;
+    public Vector3f scale;
 }
