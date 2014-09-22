@@ -2,6 +2,7 @@ package twinrealm.events;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import models.*;
+import models.attributes.ColorAttribute;
 import models.data.IndexData;
 import models.data.VertexAttribute;
 import models.data.VertexAttributes;
@@ -57,7 +58,6 @@ public class TREventHandlerForge
     public static void drawModelDirectly(Model model)
     {
         GL11.glDisable(GL11.GL_TEXTURE_2D);
-        GL11.glColor3f(0.0f, 1.0f, 1.0f);
 
         for (Node node : model.nodes)
         {
@@ -73,6 +73,14 @@ public class TREventHandlerForge
             for (NodePart nodePart : node.parts)
             {
                 MeshPart meshPart = nodePart.meshPart;
+                Material material = nodePart.material;
+
+                ColorAttribute diffuse = material.get(ColorAttribute.class, ColorAttribute.Diffuse);
+
+                if (diffuse != null)
+                    GL11.glColor4f(diffuse.color.getRed() / 255.0f, diffuse.color.getGreen() / 255.0f, diffuse.color.getBlue() / 255.0f, diffuse.color.getAlpha() / 255.0f);
+                else
+                    GL11.glColor3f(1.0f, 1.0f, 1.0f);
 
                 Mesh mesh = meshPart.mesh;
                 IndexData indexData = mesh.getIndices();

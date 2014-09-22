@@ -21,6 +21,9 @@ package models.loaders;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import models.*;
+import models.attributes.BlendingAttribute;
+import models.attributes.ColorAttribute;
+import models.attributes.FloatAttribute;
 import models.data.VertexAttribute;
 import models.data.VertexAttributes;
 import models.loaders.data.ColorDeserializer;
@@ -84,6 +87,7 @@ public class G3DModelLoader implements ModelLoader
 
         Model model = new Model();
         loadMeshes(model, Arrays.asList(rawModel.meshes));
+        loadMaterials(model, Arrays.asList(rawModel.materials));
         loadNodes(model, Arrays.asList(rawModel.nodes));
         return model;
     }
@@ -106,7 +110,7 @@ public class G3DModelLoader implements ModelLoader
         {
             numIndices += part.indices.length;
         }
-        VertexAttributes attributes = new VertexAttributes(parseAttributes(rawMesh.attributes));
+        VertexAttributes attributes = new VertexAttributes(parseVertexAttributes(rawMesh.attributes));
         int numVertices = rawMesh.vertices.length / (attributes.vertexSize / 4);
 
         Mesh mesh = new Mesh(true, numVertices, numIndices, attributes);
@@ -118,7 +122,7 @@ public class G3DModelLoader implements ModelLoader
         {
             MeshPart meshPart = new MeshPart();
             meshPart.id = part.id;
-            meshPart.primitiveType = parseGLType(part.type);
+            meshPart.primitiveType = parseGLDrawMode(part.type);
             meshPart.indexOffset = offset;
             meshPart.numVertices = part.indices.length;
             meshPart.mesh = mesh;
@@ -133,6 +137,8 @@ public class G3DModelLoader implements ModelLoader
     private static void loadNodes(Model model, Iterable<RawNode> rawNodes)
     {
         Map<String, Material> materials = new HashMap<>();
+        for (Material material : model.materials)
+            materials.put(material.id, material);
 
         Map<String, MeshPart> meshParts = new HashMap<>();
         for (MeshPart meshPart : model.meshParts)
@@ -172,12 +178,45 @@ public class G3DModelLoader implements ModelLoader
         NodePart nodePart = new NodePart();
 
         nodePart.meshPart = meshParts.get(rawNodePart.meshpartid);
+
         nodePart.material = materials.get(rawNodePart.materialid);
+        if (nodePart.material == null)
+            nodePart.material = new Material();
 
         return nodePart;
     }
 
-    private static int parseGLType(String type)
+    private static void loadMaterials(Model model, List<RawMaterial> rawMaterials)
+    {
+        for (RawMaterial rawMaterial : rawMaterials)
+            model.materials.add(convertMaterial(rawMaterial));
+    }
+
+    public static Material convertMaterial(RawMaterial rawMaterial)
+    {
+        Material material = new Material();
+
+        material.id = rawMaterial.id;
+
+        if (rawMaterial.ambient != null)
+            material.set(new ColorAttribute(ColorAttribute.Ambient, rawMaterial.ambient));
+        if (rawMaterial.diffuse != null)
+            material.set(new ColorAttribute(ColorAttribute.Diffuse, rawMaterial.diffuse));
+        if (rawMaterial.specular != null)
+            material.set(new ColorAttribute(ColorAttribute.Specular, rawMaterial.specular));
+        if (rawMaterial.emissive != null)
+            material.set(new ColorAttribute(ColorAttribute.Emissive, rawMaterial.emissive));
+        if (rawMaterial.reflection != null)
+            material.set(new ColorAttribute(ColorAttribute.Reflection, rawMaterial.reflection));
+        if (rawMaterial.shininess > 0f)
+            material.set(new FloatAttribute(FloatAttribute.Shininess, rawMaterial.shininess));
+        if (rawMaterial.opacity != 1.f)
+            material.set(new BlendingAttribute(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, rawMaterial.opacity));
+
+        return material;
+    }
+
+    private static int parseGLDrawMode(String type)
     {
         switch (type)
         {
@@ -197,7 +236,7 @@ public class G3DModelLoader implements ModelLoader
         }
     }
 
-    public static VertexAttribute[] parseAttributes(String[] attributes)
+    public static VertexAttribute[] parseVertexAttributes(String[] attributes)
     {
         List<VertexAttribute> vertexAttributes = new ArrayList<>();
         int unit = 0;
