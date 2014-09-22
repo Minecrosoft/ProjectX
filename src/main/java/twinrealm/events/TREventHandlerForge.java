@@ -2,6 +2,7 @@ package twinrealm.events;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import models.*;
+import models.attributes.BlendingAttribute;
 import models.attributes.ColorAttribute;
 import models.data.IndexData;
 import models.data.VertexAttribute;
@@ -76,11 +77,20 @@ public class TREventHandlerForge
                 Material material = nodePart.material;
 
                 ColorAttribute diffuse = material.get(ColorAttribute.class, ColorAttribute.Diffuse);
+                float[] rgb = diffuse != null
+                        ? new float[]{diffuse.color.getRed() / 255.0f, diffuse.color.getGreen() / 255.0f, diffuse.color.getBlue() / 255.0f}
+                        : new float[]{1.0f, 1.0f, 1.0f};
 
-                if (diffuse != null)
-                    GL11.glColor4f(diffuse.color.getRed() / 255.0f, diffuse.color.getGreen() / 255.0f, diffuse.color.getBlue() / 255.0f, diffuse.color.getAlpha() / 255.0f);
+                BlendingAttribute blend = material.get(BlendingAttribute.class, BlendingAttribute.Type);
+                if (blend != null)
+                {
+                    GL11.glEnable(GL11.GL_BLEND);
+                    GL11.glBlendFunc(blend.sourceFunction, blend.destFunction);
+
+                    GL11.glColor4f(rgb[0], rgb[1], rgb[2], blend.opacity);
+                }
                 else
-                    GL11.glColor3f(1.0f, 1.0f, 1.0f);
+                    GL11.glColor3f(rgb[0], rgb[1], rgb[2]);
 
                 Mesh mesh = meshPart.mesh;
                 IndexData indexData = mesh.getIndices();
@@ -100,6 +110,9 @@ public class TREventHandlerForge
                     GL11.glVertex3f(vertexBuf.get(index), vertexBuf.get(index + 1), vertexBuf.get(index + 2));
                 }
                 GL11.glEnd();
+
+                if (blend != null)
+                    GL11.glDisable(GL11.GL_BLEND);
             }
 
             GL11.glPopMatrix();
