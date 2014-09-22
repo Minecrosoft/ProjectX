@@ -35,9 +35,11 @@ public class TREventHandlerForge
 //    {
 //        event.setCanceled(true);
 //
+//        GL11.glDisable(GL11.GL_LIGHTING);
 //        GL11.glPushMatrix();
 //        GL11.glTranslated(event.x, event.y, event.z);
 //        ModelRenderer.renderModelDirectly(model);
 //        GL11.glPopMatrix();
+//        GL11.glEnable(GL11.GL_LIGHTING);
 //    }
 }
