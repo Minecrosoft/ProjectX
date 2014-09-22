@@ -30,7 +30,7 @@ import models.loaders.data.ColorDeserializer;
 import models.loaders.data.QuaternionDeserializer;
 import models.loaders.data.Vector2fDeserializer;
 import models.loaders.data.Vector3fDeserializer;
-import models.loaders.g3draw.*;
+import models.loaders.g3d.*;
 import models.utils.BufferUtils;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.opengl.GL11;
@@ -69,56 +69,56 @@ public class G3DModelLoader implements ModelLoader
     @Override
     public Model createModel(Reader reader)
     {
-        RawModel rawModel = gson.fromJson(reader, RawModel.class);
+        G3DModel g3DModel = gson.fromJson(reader, G3DModel.class);
 
-        return modelFromRawModel(rawModel, logger);
+        return modelFromRawModel(g3DModel, logger);
     }
 
-    public static Model modelFromRawModel(RawModel rawModel, Logger logger)
+    public static Model modelFromRawModel(G3DModel g3DModel, Logger logger)
     {
-        if (rawModel.version == null)
-            rawModel.version = new short[]{VERSION_HI, VERSION_LO};
+        if (g3DModel.version == null)
+            g3DModel.version = new short[]{VERSION_HI, VERSION_LO};
 
-        if (rawModel.version[0] != VERSION_HI || rawModel.version[1] != VERSION_LO)
+        if (g3DModel.version[0] != VERSION_HI || g3DModel.version[1] != VERSION_LO)
         {
             logger.error("Version number of g3d file unknown");
             return null;
         }
 
         Model model = new Model();
-        loadMeshes(model, Arrays.asList(rawModel.meshes));
-        loadMaterials(model, Arrays.asList(rawModel.materials));
-        loadNodes(model, Arrays.asList(rawModel.nodes));
+        loadMeshes(model, Arrays.asList(g3DModel.meshes));
+        loadMaterials(model, Arrays.asList(g3DModel.materials));
+        loadNodes(model, Arrays.asList(g3DModel.nodes));
         return model;
     }
 
-    private static void loadMeshes(Model model, Iterable<RawMesh> meshes)
+    private static void loadMeshes(Model model, Iterable<G3DMesh> meshes)
     {
-        for (RawMesh rawMesh : meshes)
+        for (G3DMesh g3DMesh : meshes)
         {
-            Mesh mesh = convertMesh(rawMesh, model.meshParts);
+            Mesh mesh = convertMesh(g3DMesh, model.meshParts);
 
             model.meshes.add(mesh);
             model.disposables.add(mesh);
         }
     }
 
-    public static Mesh convertMesh(RawMesh rawMesh, List<MeshPart> meshParts)
+    public static Mesh convertMesh(G3DMesh g3DMesh, List<MeshPart> meshParts)
     {
         int numIndices = 0;
-        for (RawMeshPart part : rawMesh.parts)
+        for (G3DMeshPart part : g3DMesh.parts)
         {
             numIndices += part.indices.length;
         }
-        VertexAttributes attributes = new VertexAttributes(parseVertexAttributes(rawMesh.attributes));
-        int numVertices = rawMesh.vertices.length / (attributes.vertexSize / 4);
+        VertexAttributes attributes = new VertexAttributes(parseVertexAttributes(g3DMesh.attributes));
+        int numVertices = g3DMesh.vertices.length / (attributes.vertexSize / 4);
 
         Mesh mesh = new Mesh(true, numVertices, numIndices, attributes);
 
-        BufferUtils.copy(rawMesh.vertices, mesh.getVerticesBuffer(), rawMesh.vertices.length, 0);
+        BufferUtils.copy(g3DMesh.vertices, mesh.getVerticesBuffer(), g3DMesh.vertices.length, 0);
         int offset = 0;
         mesh.getIndicesBuffer().clear();
-        for (RawMeshPart part : rawMesh.parts)
+        for (G3DMeshPart part : g3DMesh.parts)
         {
             MeshPart meshPart = new MeshPart();
             meshPart.id = part.id;
@@ -134,7 +134,7 @@ public class G3DModelLoader implements ModelLoader
         return mesh;
     }
 
-    private static void loadNodes(Model model, Iterable<RawNode> rawNodes)
+    private static void loadNodes(Model model, Iterable<G3DNode> rawNodes)
     {
         Map<String, Material> materials = new HashMap<>();
         for (Material material : model.materials)
@@ -144,74 +144,74 @@ public class G3DModelLoader implements ModelLoader
         for (MeshPart meshPart : model.meshParts)
             meshParts.put(meshPart.id, meshPart);
 
-        for (RawNode rawNode : rawNodes)
-            model.nodes.add(convertNode(rawNode, materials, meshParts));
+        for (G3DNode g3DNode : rawNodes)
+            model.nodes.add(convertNode(g3DNode, materials, meshParts));
     }
 
-    public static Node convertNode(RawNode rawNode, Map<String, Material> materials, Map<String, MeshPart> meshParts)
+    public static Node convertNode(G3DNode g3DNode, Map<String, Material> materials, Map<String, MeshPart> meshParts)
     {
         Node node = new Node();
-        node.id = rawNode.id;
+        node.id = g3DNode.id;
 
-        if (rawNode.translation != null)
-            node.translation.set(rawNode.translation);
+        if (g3DNode.translation != null)
+            node.translation.set(g3DNode.translation);
 
-        if (rawNode.rotation != null)
-            node.rotation.set(rawNode.rotation);
+        if (g3DNode.rotation != null)
+            node.rotation.set(g3DNode.rotation);
 
-        if (rawNode.scale != null)
-            node.scale.set(rawNode.scale);
+        if (g3DNode.scale != null)
+            node.scale.set(g3DNode.scale);
 
-        if (rawNode.parts != null)
-            for (RawNodePart rawNodePart : rawNode.parts)
-                node.parts.add(convertNodePart(rawNodePart, materials, meshParts));
+        if (g3DNode.parts != null)
+            for (G3DNodePart g3DNodePart : g3DNode.parts)
+                node.parts.add(convertNodePart(g3DNodePart, materials, meshParts));
 
-        if (rawNode.children != null)
-            for (RawNode child : rawNode.children)
+        if (g3DNode.children != null)
+            for (G3DNode child : g3DNode.children)
                 node.children.add(convertNode(child, materials, meshParts));
 
         return node;
     }
 
-    public static NodePart convertNodePart(RawNodePart rawNodePart, Map<String, Material> materials, Map<String, MeshPart> meshParts)
+    public static NodePart convertNodePart(G3DNodePart g3DNodePart, Map<String, Material> materials, Map<String, MeshPart> meshParts)
     {
         NodePart nodePart = new NodePart();
 
-        nodePart.meshPart = meshParts.get(rawNodePart.meshpartid);
+        nodePart.meshPart = meshParts.get(g3DNodePart.meshpartid);
 
-        nodePart.material = materials.get(rawNodePart.materialid);
+        nodePart.material = materials.get(g3DNodePart.materialid);
         if (nodePart.material == null)
             nodePart.material = new Material();
 
         return nodePart;
     }
 
-    private static void loadMaterials(Model model, List<RawMaterial> rawMaterials)
+    private static void loadMaterials(Model model, List<G3DMaterial> g3DMaterials)
     {
-        for (RawMaterial rawMaterial : rawMaterials)
-            model.materials.add(convertMaterial(rawMaterial));
+        for (G3DMaterial g3DMaterial : g3DMaterials)
+            model.materials.add(convertMaterial(g3DMaterial));
     }
 
-    public static Material convertMaterial(RawMaterial rawMaterial)
+    public static Material convertMaterial(G3DMaterial g3DMaterial)
     {
         Material material = new Material();
 
-        material.id = rawMaterial.id;
+        material.id = g3DMaterial.id;
 
-        if (rawMaterial.ambient != null)
-            material.set(new ColorAttribute(ColorAttribute.Ambient, rawMaterial.ambient));
-        if (rawMaterial.diffuse != null)
-            material.set(new ColorAttribute(ColorAttribute.Diffuse, rawMaterial.diffuse));
-        if (rawMaterial.specular != null)
-            material.set(new ColorAttribute(ColorAttribute.Specular, rawMaterial.specular));
-        if (rawMaterial.emissive != null)
-            material.set(new ColorAttribute(ColorAttribute.Emissive, rawMaterial.emissive));
-        if (rawMaterial.reflection != null)
-            material.set(new ColorAttribute(ColorAttribute.Reflection, rawMaterial.reflection));
-        if (rawMaterial.shininess > 0f)
-            material.set(new FloatAttribute(FloatAttribute.Shininess, rawMaterial.shininess));
-        if (rawMaterial.opacity != 1.f)
-            material.set(new BlendingAttribute(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, rawMaterial.opacity));
+        if (g3DMaterial.ambient != null)
+            material.set(new ColorAttribute(ColorAttribute.Ambient, g3DMaterial.ambient));
+        if (g3DMaterial.diffuse != null)
+            material.set(new ColorAttribute(ColorAttribute.Diffuse, g3DMaterial.diffuse));
+        if (g3DMaterial.specular != null)
+            material.set(new ColorAttribute(ColorAttribute.Specular, g3DMaterial.specular));
+        if (g3DMaterial.emissive != null)
+            material.set(new ColorAttribute(ColorAttribute.Emissive, g3DMaterial.emissive));
+        if (g3DMaterial.reflection != null)
+            material.set(new ColorAttribute(ColorAttribute.Reflection, g3DMaterial.reflection));
+        if (g3DMaterial.shininess > 0f)
+            material.set(new FloatAttribute(FloatAttribute.Shininess, g3DMaterial.shininess));
+        if (g3DMaterial.opacity != 1.f)
+            material.set(new BlendingAttribute(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, g3DMaterial.opacity));
 
         return material;
     }

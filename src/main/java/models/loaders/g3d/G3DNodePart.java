@@ -16,17 +16,12 @@
  * limitations under the License.
  */
 
-package models.loaders.g3draw;
+package models.loaders.g3d;
 
-import org.lwjgl.util.vector.Quaternion;
-
-/**
- * Created by lukas on 21.09.14.
- */
-public class RawKeyframe
+public class G3DNodePart
 {
-    public float keytime;
-    public Quaternion rotation;
-    public float[] translation;
-    public float[] scale;
+	public String materialid;
+	public String meshpartid;
+	public G3DBone[] bones;
+	public int uvMapping[][];
 }

@@ -16,12 +16,10 @@
  * limitations under the License.
  */
 
-package models.loaders.g3draw;
+package models.loaders.g3d;
 
-public class RawMesh
+public class G3DAnimation
 {
 	public String id;
-	public String[] attributes;
-	public float[] vertices;
-	public RawMeshPart[] parts;
+	public G3DNodeAnimation[] nodeAnimations;
 }

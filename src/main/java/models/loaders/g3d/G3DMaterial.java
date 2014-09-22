@@ -16,13 +16,24 @@
  * limitations under the License.
  */
 
-package models.loaders.g3draw;
+package models.loaders.g3d;
 
-/**
- * Created by lukas on 21.09.14.
- */
-public class RawBoneAnimation
+import java.awt.*;
+
+public class G3DMaterial
 {
-    public String boneId;
-    public RawKeyframe[] keyframes;
+	public String id;
+
+	public String type;
+
+	public Color ambient;
+	public Color diffuse;
+	public Color specular;
+	public Color emissive;
+	public Color reflection;
+
+	public float shininess;
+	public float opacity = 1.f;
+
+	public G3DTexture[] textures;
 }

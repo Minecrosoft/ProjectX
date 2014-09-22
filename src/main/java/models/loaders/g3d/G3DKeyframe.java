@@ -16,24 +16,17 @@
  * limitations under the License.
  */
 
-package models.loaders.g3draw;
+package models.loaders.g3d;
 
-import java.awt.*;
+import org.lwjgl.util.vector.Quaternion;
 
-public class RawMaterial
+/**
+ * Created by lukas on 21.09.14.
+ */
+public class G3DKeyframe
 {
-	public String id;
-
-	public String type;
-
-	public Color ambient;
-	public Color diffuse;
-	public Color specular;
-	public Color emissive;
-	public Color reflection;
-
-	public float shininess;
-	public float opacity = 1.f;
-
-	public RawTexture[] textures;
+    public float keytime;
+    public Quaternion rotation;
+    public float[] translation;
+    public float[] scale;
 }

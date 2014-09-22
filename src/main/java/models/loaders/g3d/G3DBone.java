@@ -16,17 +16,18 @@
  * limitations under the License.
  */
 
-package models.loaders.g3draw;
+package models.loaders.g3d;
 
 import org.lwjgl.util.vector.Quaternion;
 import org.lwjgl.util.vector.Vector3f;
 
-public class RawNode
+/**
+ * Created by lukas on 21.09.14.
+ */
+public class G3DBone
 {
-	public String id;
-	public Vector3f translation;
-	public Quaternion rotation;
-	public Vector3f scale;
-	public RawNodePart[] parts;
-	public RawNode[] children;
+    public String node;
+    public Vector3f translation;
+    public Quaternion rotation;
+    public Vector3f scale;
 }

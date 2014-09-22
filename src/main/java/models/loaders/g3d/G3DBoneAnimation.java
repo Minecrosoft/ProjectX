@@ -16,11 +16,13 @@
  * limitations under the License.
  */
 
-package models.loaders.g3draw;
+package models.loaders.g3d;
 
-public class RawMeshPart
+/**
+ * Created by lukas on 21.09.14.
+ */
+public class G3DBoneAnimation
 {
-	public String id;
-	public short[] indices;
-	public String type;
+    public String boneId;
+    public G3DKeyframe[] keyframes;
 }
