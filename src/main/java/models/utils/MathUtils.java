@@ -18,51 +18,144 @@
 
 package models.utils;
 
-import org.lwjgl.util.vector.Matrix3f;
-import org.lwjgl.util.vector.Matrix4f;
-import org.lwjgl.util.vector.Quaternion;
-import org.lwjgl.util.vector.Vector3f;
+import net.minecraft.util.MathHelper;
 
-import java.nio.FloatBuffer;
+import java.util.Random;
 
-/**
- * Created by lukas on 22.09.14.
- */
 public class MathUtils
 {
-    public static Matrix4f setTRS(Matrix4f matrix, Vector3f translation, Quaternion quaternion, Vector3f scale)
+    public static int floorInt(double value)
     {
-        quaternion = quaternion.normalise(new Quaternion());
-        return setTRS(matrix, translation.getX(), translation.getY(), translation.getZ(), quaternion.getX(), quaternion.getY(), quaternion.getZ(), quaternion.getW(), scale.getX(), scale.getY(), scale.getZ());
+        int i = (int)value;
+        return value < (float)i ? i - 1 : i;
     }
 
-    public static Matrix4f setTRS(Matrix4f matrix, float translationX, float translationY, float translationZ, float quaternionX, float quaternionY, float quaternionZ, float quaternionW, float scaleX, float scaleY, float scaleZ)
+    public static int floorInt(float value)
     {
-        final float xs = quaternionX * 2f, ys = quaternionY * 2f, zs = quaternionZ * 2f;
-        final float wx = quaternionW * xs, wy = quaternionW * ys, wz = quaternionW * zs;
-        final float xx = quaternionX * xs, xy = quaternionX * ys, xz = quaternionX * zs;
-        final float yy = quaternionY * ys, yz = quaternionY * zs, zz = quaternionZ * zs;
+        int i = (int)value;
+        return value < (float)i ? i - 1 : i;
+    }
 
-        matrix.m00 = scaleX * (1.0f - (yy + zz));
-        matrix.m10 = scaleY * (xy - wz);
-        matrix.m20 = scaleZ * (xz + wy);
-        matrix.m30 = translationX;
+    public static float sqrt(float value)
+    {
+        return (float)Math.sqrt((double)value);
+    }
 
-        matrix.m01 = scaleX * (xy + wz);
-        matrix.m11 = scaleY * (1.0f - (xx + zz));
-        matrix.m21 = scaleZ * (yz - wx);
-        matrix.m31 = translationY;
+    public static double sqrt(double value)
+    {
+        return Math.sqrt(value);
+    }
 
-        matrix.m02 = scaleX * (xz - wy);
-        matrix.m12 = scaleY * (yz + wx);
-        matrix.m22 = scaleZ * (1.0f - (xx + yy));
-        matrix.m32 = translationZ;
+    public static float sin(float value)
+    {
+        return MathHelper.sin(value);
+    }
 
-        matrix.m03 = 0.f;
-        matrix.m13 = 0.f;
-        matrix.m23 = 0.f;
-        matrix.m33 = 1.0f;
+    public static double sin(double value)
+    {
+        return (double) MathHelper.sin((float) value);
+    }
 
-        return matrix;
+    public static float cos(float value)
+    {
+        return MathHelper.cos(value);
+    }
+
+    public static double cos(double value)
+    {
+        return (double) MathHelper.cos((float) value);
+    }
+
+    public static double mix(double value1, double value2, double progress)
+    {
+        return value1 + (value2 - value1) * progress;
+    }
+
+    public static double mixEaseInOut(double value1, double value2, double progress)
+    {
+        return cubicMix(value1, value1, value2, value2, progress);
+    }
+
+    public static double easeZeroToOne(double progress)
+    {
+        return cubicMix(0.0, 0.0, 1.0, 1.0, clamp(0.0, progress, 1.0));
+    }
+
+    public static double quadraticMix(double value1, double value2, double value3, double progress)
+    {
+        return mix(mix(value1, value2, progress), mix(value2, value3, progress), progress);
+    }
+
+    public static double cubicMix(double value1, double value2, double value3, double value4, double progress)
+    {
+        return mix(quadraticMix(value1, value2, value3, progress), quadraticMix(value2, value3, value4, progress), progress);
+    }
+
+    public static float clamp(float min, float value, float max)
+    {
+        return value < min ? min : value > max ? max : value;
+    }
+
+    public static double clamp(double min, double value, double max)
+    {
+        return value < min ? min : value > max ? max : value;
+    }
+
+    public static float approachValue(float value, float dest, float mulSpeed, float plusSpeed)
+    {
+        value += (dest - value) * mulSpeed;
+
+        if (value > dest)
+        {
+            value -= plusSpeed;
+            if (value < dest)
+            {
+                value = dest;
+            }
+        }
+        else if (value < dest)
+        {
+            value += plusSpeed;
+            if (value > dest)
+            {
+                value = dest;
+            }
+        }
+
+        return value;
+    }
+
+    public static double approachValue(double value, double dest, double mulSpeed, double plusSpeed)
+    {
+        value += (dest - value) * mulSpeed;
+
+        if (value > dest)
+        {
+            value -= plusSpeed;
+            if (value < dest)
+            {
+                value = dest;
+            }
+        }
+        else if (value < dest)
+        {
+            value += plusSpeed;
+            if (value > dest)
+            {
+                value = dest;
+            }
+        }
+
+        return value;
+    }
+
+    public static int randomLinearNumber(Random random, float number)
+    {
+        return floorInt(number) + ((random.nextFloat() < (number % 1.0f)) ? 1 : 0);
+    }
+
+    public static float zeroToOne(float value, float min, float max)
+    {
+        return clamp(0.0f, (value - min) / (max - min), 1.0f);
     }
 }

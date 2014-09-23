@@ -257,7 +257,7 @@ public class G3DModelLoader implements ModelLoader
         nodeAnimation.node = nodes.get(g3DNodeAnimation.boneId);
 
         for (G3DKeyframe keyframe : g3DNodeAnimation.keyframes)
-            nodeAnimation.keyframes.add(convertKeyframe(keyframe));
+            nodeAnimation.addKeyframe(convertKeyframe(keyframe));
 
         return nodeAnimation;
     }

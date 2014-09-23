@@ -16,34 +16,46 @@
  * limitations under the License.
  */
 
-package models;
+package models.animation;
 
-import com.sun.javafx.collections.transformation.SortedList;
+import models.Animation;
+import models.NodeAnimation;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 /**
- * Created by lukas on 22.09.14.
+ * Created by lukas on 23.09.14.
  */
-public class NodeAnimation implements Comparator<NodeKeyframe>
+public class Animator
 {
-    /** the Node affected by this animation **/
-    public Node node;
-    /** the keyframes, sorted by time, ascending **/
-    public List<NodeKeyframe> keyframes = new ArrayList<>();
+    private Animation animation;
 
-    public void addKeyframe(NodeKeyframe keyframe)
+    private List<NodeAnimator> nodeAnimators = new ArrayList<>();
+
+    private boolean loop;
+
+    public Animator(Animation animation, boolean loop)
     {
-        keyframes.add(keyframe);
-        Collections.sort(keyframes, this);
+        this.animation = animation;
+
+        for (NodeAnimation nodeAnimation : animation.nodeAnimations)
+            nodeAnimators.add(new NodeAnimator(nodeAnimation));
+
+        this.loop = loop;
     }
 
-    @Override
-    public int compare(NodeKeyframe o1, NodeKeyframe o2)
+    public void update(float time, float alpha)
     {
-        return Float.compare(o1.keytime, o2.keytime);
+        if (loop)
+            time %= animation.duration;
+
+        for (NodeAnimator nodeAnimator : nodeAnimators)
+            nodeAnimator.update(time, alpha);
+    }
+
+    public void endAnimation()
+    {
+        update(0.0f, 0.0f);
     }
 }

@@ -5,6 +5,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import models.Model;
 import models.ModelRenderer;
+import models.animation.Animator;
 import models.loaders.MinecraftModelLoader;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderLivingEvent;
@@ -18,10 +19,12 @@ import twinrealm.TwinRealm;
 public class TREventHandlerForge
 {
     Model model;
+    Animator animator;
 
     public TREventHandlerForge()
     {
-        model = MinecraftModelLoader.loadModelG3DJ(new ResourceLocation(TwinRealm.MODID, "models/Icosphere.g3dj"));
+        model = MinecraftModelLoader.loadModelG3DJ(new ResourceLocation(TwinRealm.MODID, "models/SquishCube.g3dj"));
+        animator = new Animator(model.animationForID("Default Take"), true);
     }
 
     public void register()
@@ -38,6 +41,7 @@ public class TREventHandlerForge
 //        GL11.glDisable(GL11.GL_LIGHTING);
 //        GL11.glPushMatrix();
 //        GL11.glTranslated(event.x, event.y, event.z);
+//        animator.update(event.entity.ticksExisted * 2500.0f / 20.0f, 1.0f);
 //        ModelRenderer.renderModelDirectly(model);
 //        GL11.glPopMatrix();
 //        GL11.glEnable(GL11.GL_LIGHTING);

@@ -16,34 +16,28 @@
  * limitations under the License.
  */
 
-package models;
+package models.animation;
 
-import models.data.Disposable;
+import org.lwjgl.util.vector.Vector3f;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by lukas on 21.09.14.
+ * Created by lukas on 23.09.14.
  */
-public class Model
+public class NodeFieldAnimatorVector3f extends NodeFieldAnimator<Vector3f>
 {
-    public final List<Material> materials = new ArrayList<>();
-    public final List<Node> nodes = new ArrayList<>();
-    public final List<Animation> animations = new ArrayList<>();
-    public final List<Mesh> meshes = new ArrayList<>();
-    public final List<MeshPart> meshParts = new ArrayList<>();
-
-    public final List<Disposable> disposables = new ArrayList<>();
-
-    public Animation animationForID(String id)
+    public NodeFieldAnimatorVector3f()
     {
-        for (Animation animation : animations)
-        {
-            if (animation.id.equals(id))
-                return animation;
-        }
+        super(new Vector3f());
+    }
 
-        return null;
+    @Override
+    public void interpolate(Vector3f dest, Vector3f left, Vector3f right, float progress)
+    {
+        float rev = 1.0f - progress;
+        dest.set(left.x * rev + right.x * progress,
+                left.y * rev + right.y * progress,
+                left.z * rev + right.z * progress);
     }
 }

@@ -24,7 +24,7 @@ import models.data.IndexData;
 import models.data.VertexAttribute;
 import models.data.VertexAttributes;
 import models.data.VertexData;
-import models.utils.MathUtils;
+import models.utils.MatrixMathUtils;
 import net.minecraft.client.renderer.GLAllocation;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Matrix4f;
@@ -46,7 +46,7 @@ public class ModelRenderer
             GL11.glPushMatrix();
 
             Matrix4f nodeTransMat = new Matrix4f();
-            MathUtils.setTRS(nodeTransMat, node.translation, node.rotation, node.scale);
+            MatrixMathUtils.setTRS(nodeTransMat, node.translation, node.rotation, node.scale);
             FloatBuffer nodeTransMatBuffer = GLAllocation.createDirectFloatBuffer(4 * 4);
             nodeTransMat.store(nodeTransMatBuffer);
             nodeTransMatBuffer.position(0);
