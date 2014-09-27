@@ -34,9 +34,10 @@ public class MinecraftModelLoader
     private static Logger logger = LogManager.getLogger("Models");
     private static G3DModelLoader g3DModelLoader = new G3DModelLoader(logger);
 
-    public static Model loadModelG3DJ(ResourceLocation resourceLocation)
+    public static Model loadModelG3DJ(ResourceLocation resourceLocation, String basePath)
     {
-        return g3DModelLoader.createModel(new InputStreamReader(streamFromResourceLocation(resourceLocation)));
+        return g3DModelLoader.createModel(new InputStreamReader(streamFromResourceLocation(resourceLocation)),
+                new MinecraftTextureProvider(basePath));
     }
 
     public static InputStream streamFromResourceLocation(ResourceLocation resourceLocation)

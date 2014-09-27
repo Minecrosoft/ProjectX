@@ -23,7 +23,7 @@ public class TREventHandlerForge
 
     public TREventHandlerForge()
     {
-        model = MinecraftModelLoader.loadModelG3DJ(new ResourceLocation(TwinRealm.MODID, "models/SquishCube.g3dj"));
+        model = MinecraftModelLoader.loadModelG3DJ(new ResourceLocation(TwinRealm.MODID, "models/SquishCube.g3dj"), TwinRealm.textureBase + TwinRealm.pathModTextures);
         animator = new Animator(model.animationForID("Default Take"), true);
     }
 

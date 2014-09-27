@@ -19,6 +19,7 @@
 package models.loaders;
 
 import models.Model;
+import models.TextureProvider;
 
 import java.io.InputStream;
 import java.io.Reader;
@@ -28,5 +29,5 @@ import java.io.Reader;
  */
 public interface ModelLoader
 {
-    Model createModel(Reader reader);
+    Model createModel(Reader reader, TextureProvider textureProvider);
 }

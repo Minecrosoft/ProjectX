@@ -66,6 +66,11 @@ public class MathUtils
         return (double) MathHelper.cos((float) value);
     }
 
+    public static float mix(float value1, float value2, float progress)
+    {
+        return value1 + (value2 - value1) * progress;
+    }
+
     public static double mix(double value1, double value2, double progress)
     {
         return value1 + (value2 - value1) * progress;

@@ -16,15 +16,12 @@
  * limitations under the License.
  */
 
-package models.loaders.g3d;
+package models;
 
-import org.lwjgl.util.vector.Vector2f;
-
-public class G3DTexture
+/**
+ * Created by lukas on 27.09.14.
+ */
+public interface TextureProvider
 {
-	public String id;
-	public String filename;
-	public Vector2f uvTranslation;
-	public Vector2f uvScaling;
-	public String type;
+    Texture provideTexture(String textureName);
 }

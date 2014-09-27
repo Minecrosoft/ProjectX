@@ -16,15 +16,17 @@
  * limitations under the License.
  */
 
-package models.loaders.g3d;
+package models;
 
-import org.lwjgl.util.vector.Vector2f;
-
-public class G3DTexture
+public interface Texture
 {
-	public String id;
-	public String filename;
-	public Vector2f uvTranslation;
-	public Vector2f uvScaling;
-	public String type;
+    void bindTexture();
+
+    float minU();
+
+    float maxU();
+
+    float minV();
+
+    float maxV();
 }

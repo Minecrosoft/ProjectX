@@ -24,6 +24,7 @@ import models.*;
 import models.attributes.BlendingAttribute;
 import models.attributes.ColorAttribute;
 import models.attributes.FloatAttribute;
+import models.attributes.TextureAttribute;
 import models.data.VertexAttribute;
 import models.data.VertexAttributes;
 import models.loaders.data.ColorDeserializer;
@@ -67,14 +68,14 @@ public class G3DModelLoader implements ModelLoader
     }
 
     @Override
-    public Model createModel(Reader reader)
+    public Model createModel(Reader reader, TextureProvider textureProvider)
     {
         G3DModel g3DModel = gson.fromJson(reader, G3DModel.class);
 
-        return modelFromRawModel(g3DModel, logger);
+        return modelFromRawModel(g3DModel, textureProvider, logger);
     }
 
-    public static Model modelFromRawModel(G3DModel g3DModel, Logger logger)
+    public static Model modelFromRawModel(G3DModel g3DModel, TextureProvider textureProvider, Logger logger)
     {
         if (g3DModel.version == null)
             g3DModel.version = new short[]{VERSION_HI, VERSION_LO};
@@ -87,7 +88,7 @@ public class G3DModelLoader implements ModelLoader
 
         Model model = new Model();
         loadMeshes(model, Arrays.asList(g3DModel.meshes));
-        loadMaterials(model, Arrays.asList(g3DModel.materials));
+        loadMaterials(model, Arrays.asList(g3DModel.materials), textureProvider, logger);
         loadNodes(model, Arrays.asList(g3DModel.nodes));
         loadAnimations(model, Arrays.asList(g3DModel.animations));
         return model;
@@ -187,13 +188,13 @@ public class G3DModelLoader implements ModelLoader
         return nodePart;
     }
 
-    private static void loadMaterials(Model model, List<G3DMaterial> g3DMaterials)
+    private static void loadMaterials(Model model, List<G3DMaterial> g3DMaterials, TextureProvider textureProvider, Logger logger)
     {
         for (G3DMaterial g3DMaterial : g3DMaterials)
-            model.materials.add(convertMaterial(g3DMaterial));
+            model.materials.add(convertMaterial(g3DMaterial, textureProvider, logger));
     }
 
-    public static Material convertMaterial(G3DMaterial g3DMaterial)
+    public static Material convertMaterial(G3DMaterial g3DMaterial, TextureProvider textureProvider, Logger logger)
     {
         Material material = new Material();
 
@@ -213,6 +214,42 @@ public class G3DModelLoader implements ModelLoader
             material.set(new FloatAttribute(FloatAttribute.Shininess, g3DMaterial.shininess));
         if (g3DMaterial.opacity != 1.f)
             material.set(new BlendingAttribute(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, g3DMaterial.opacity));
+
+        if (g3DMaterial.textures != null)
+        {
+            for (G3DTexture tex : g3DMaterial.textures)
+            {
+                Texture texture = textureProvider.provideTexture(tex.filename);
+
+                if ((tex.uvScaling != null && (tex.uvScaling.getX() != 1.0f || tex.uvScaling.getY() != 1.0f))
+                        || (tex.uvTranslation != null && (tex.uvTranslation.getX() != 0.0f || tex.uvTranslation.getY() != 0.0f)))
+                {
+                    Vector2f scale = tex.uvScaling != null ? tex.uvScaling : new Vector2f(1, 1);
+                    Vector2f trans = tex.uvTranslation != null ? tex.uvTranslation : new Vector2f(0, 0);
+
+                    texture = new TextureSub(texture, trans.getX(), trans.getY(), trans.getX() + scale.getX(), trans.getY() + scale.getY());
+                }
+
+                switch (tex.type)
+                {
+                    case "DIFFUSE":
+                        material.set(new TextureAttribute(TextureAttribute.Diffuse, texture));
+                        break;
+                    case "SPECULAR":
+                        material.set(new TextureAttribute(TextureAttribute.Specular, texture));
+                        break;
+                    case "BUMP":
+                        material.set(new TextureAttribute(TextureAttribute.Bump, texture));
+                        break;
+                    case "NORMAL":
+                        material.set(new TextureAttribute(TextureAttribute.Normal, texture));
+                        break;
+                    default:
+                        if (logger != null)
+                            logger.warn("Unknown texture type: '" + tex.type + "'");
+                }
+            }
+        }
 
         return material;
     }
