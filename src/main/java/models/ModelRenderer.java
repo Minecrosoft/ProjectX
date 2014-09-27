@@ -58,6 +58,19 @@ public class ModelRenderer
                 MeshPart meshPart = nodePart.meshPart;
                 Material material = nodePart.material;
 
+                Mesh mesh = meshPart.mesh;
+                IndexData indexData = mesh.getIndices();
+                ShortBuffer indexBuf = indexData.getBuffer();
+
+                VertexData vertexData = mesh.getVertices();
+                FloatBuffer vertexBuf = vertexData.getBuffer();
+
+                VertexAttributes vertexAttributes = vertexData.getAttributes();
+                VertexAttribute posAttr = vertexAttributes.findByUsage(VertexAttributes.Usage.Position);
+                int vertexLengthInFloats = vertexAttributes.vertexSize >> 2;
+
+                VertexAttribute textureCoordAttr = null;
+
                 float[] rgb = WHITE;
                 Texture texture = null;
                 float[] uvs = null;
@@ -66,8 +79,10 @@ public class ModelRenderer
                 {
                     TextureAttribute textureAttr = material.get(TextureAttribute.class, TextureAttribute.Diffuse);
                     texture = textureAttr.texture;
-                    
-                    uvs = guessUVs(meshPart.primitiveType, texture, meshPart.numVertices);
+
+                    textureCoordAttr = vertexAttributes.findByUsageAndUnit(VertexAttributes.Usage.TextureCoordinates, 0);
+                    if (textureCoordAttr == null)
+                        uvs = guessUVs(meshPart.primitiveType, texture, meshPart.numVertices);
                 }
                 else if (material.has(ColorAttribute.Diffuse))
                 {
@@ -93,26 +108,21 @@ public class ModelRenderer
                 else
                     GL11.glDisable(GL11.GL_TEXTURE_2D);
 
-                Mesh mesh = meshPart.mesh;
-                IndexData indexData = mesh.getIndices();
-                ShortBuffer indexBuf = indexData.getBuffer();
-
-                VertexData vertexData = mesh.getVertices();
-                FloatBuffer vertexBuf = vertexData.getBuffer();
-
-                VertexAttributes vertexAttributes = vertexData.getAttributes();
-                VertexAttribute posAttr = vertexAttributes.findByUsage(VertexAttributes.Usage.Position);
-                int vertexLengthInFloats = vertexAttributes.vertexSize >> 2;
-
                 GL11.glBegin(meshPart.primitiveType);
                 for (int i = meshPart.indexOffset; i < meshPart.numVertices + meshPart.indexOffset; i++)
                 {
-                    int index = indexBuf.get(i) * vertexLengthInFloats + posAttr.offset;
+                    int vertexIndex = indexBuf.get(i) * vertexLengthInFloats;
 
-                    if (uvs != null)
+                    if (textureCoordAttr != null)
+                    {
+                        int textureIndex = vertexIndex + (textureCoordAttr.offset >> 2);
+                        GL11.glTexCoord2f(vertexBuf.get(textureIndex), vertexBuf.get(textureIndex + 1));
+                    }
+                    else if (uvs != null)
                         GL11.glTexCoord2f(uvs[i * 2], uvs[i * 2 + 1]);
 
-                    GL11.glVertex3f(vertexBuf.get(index), vertexBuf.get(index + 1), vertexBuf.get(index + 2));
+                    int posIndex = vertexIndex + (posAttr.offset >> 2);
+                    GL11.glVertex3f(vertexBuf.get(posIndex), vertexBuf.get(posIndex + 1), vertexBuf.get(posIndex + 2));
                 }
                 GL11.glEnd();
 

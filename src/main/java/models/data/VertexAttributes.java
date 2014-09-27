@@ -22,7 +22,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
- * Instances of this class specify the vertex attributes of a mesh. VertexAttributes are used by {@link Mesh} instances to define
+ * Instances of this class specify the vertex attributes of a mesh. VertexAttributes are used by {@link models.Mesh} instances to define
  * its vertex structure. Vertex attributes have an order. The order is specified by the order they are added to this class.
  *
  * @author mzechner
@@ -105,7 +105,17 @@ public final class VertexAttributes implements Iterable<VertexAttribute>
     {
         int len = size();
         for (int i = 0; i < len; i++)
-            if (get(i).usage == usage) return get(i);
+            if (get(i).usage == usage)
+                return get(i);
+        return null;
+    }
+
+    public VertexAttribute findByUsageAndUnit(int usage, int unit)
+    {
+        int len = size();
+        for (int i = 0; i < len; i++)
+            if (get(i).usage == usage && get(i).unit == unit)
+                return get(i);
         return null;
     }
 
