@@ -20,6 +20,7 @@ package models;
 
 import models.attributes.BlendingAttribute;
 import models.attributes.ColorAttribute;
+import models.attributes.TextureAttribute;
 import models.data.IndexData;
 import models.data.VertexAttribute;
 import models.data.VertexAttributes;
@@ -37,10 +38,10 @@ import java.nio.ShortBuffer;
  */
 public class ModelRenderer
 {
+    private static final float[] WHITE = new float[]{1.0f, 1.0f, 1.0f};
+
     public static void renderModelDirectly(Model model)
     {
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
-
         for (Node node : model.nodes)
         {
             GL11.glPushMatrix();
@@ -57,10 +58,24 @@ public class ModelRenderer
                 MeshPart meshPart = nodePart.meshPart;
                 Material material = nodePart.material;
 
-                ColorAttribute diffuse = material.get(ColorAttribute.class, ColorAttribute.Diffuse);
-                float[] rgb = diffuse != null
-                        ? new float[]{diffuse.color.getRed() / 255.0f, diffuse.color.getGreen() / 255.0f, diffuse.color.getBlue() / 255.0f}
-                        : new float[]{1.0f, 1.0f, 1.0f};
+                float[] rgb = WHITE;
+                Texture texture = null;
+                float[] uvs = null;
+
+                if (material.has(TextureAttribute.Diffuse))
+                {
+                    TextureAttribute textureAttr = material.get(TextureAttribute.class, TextureAttribute.Diffuse);
+                    texture = textureAttr.texture;
+                    
+                    uvs = guessUVs(meshPart.primitiveType, texture, meshPart.numVertices);
+                }
+                else if (material.has(ColorAttribute.Diffuse))
+                {
+                    // Note that a texture replaces the color diffuse
+
+                    ColorAttribute diffuse = material.get(ColorAttribute.class, ColorAttribute.Diffuse);
+                    rgb = new float[]{diffuse.color.getRed() / 255.0f, diffuse.color.getGreen() / 255.0f, diffuse.color.getBlue() / 255.0f};
+                }
 
                 BlendingAttribute blend = material.get(BlendingAttribute.class, BlendingAttribute.Type);
                 if (blend != null)
@@ -72,6 +87,11 @@ public class ModelRenderer
                 }
                 else
                     GL11.glColor3f(rgb[0], rgb[1], rgb[2]);
+
+                if (texture != null)
+                    texture.bindTexture();
+                else
+                    GL11.glDisable(GL11.GL_TEXTURE_2D);
 
                 Mesh mesh = meshPart.mesh;
                 IndexData indexData = mesh.getIndices();
@@ -88,9 +108,16 @@ public class ModelRenderer
                 for (int i = meshPart.indexOffset; i < meshPart.numVertices + meshPart.indexOffset; i++)
                 {
                     int index = indexBuf.get(i) * vertexLengthInFloats + posAttr.offset;
+
+                    if (uvs != null)
+                        GL11.glTexCoord2f(uvs[i * 2], uvs[i * 2 + 1]);
+
                     GL11.glVertex3f(vertexBuf.get(index), vertexBuf.get(index + 1), vertexBuf.get(index + 2));
                 }
                 GL11.glEnd();
+
+                if (texture == null)
+                    GL11.glEnable(GL11.GL_TEXTURE_2D);
 
                 if (blend != null)
                     GL11.glDisable(GL11.GL_BLEND);
@@ -98,7 +125,35 @@ public class ModelRenderer
 
             GL11.glPopMatrix();
         }
+    }
 
-        GL11.glEnable(GL11.GL_TEXTURE_2D);
+    public static float[] guessUVs(int primitiveType, Texture texture, int length)
+    {
+        float[] uvs = new float[length * 2];
+
+        for (int i = 0; i < uvs.length / 2; i++) // Go through all combinations... Works for quads, the rest at least gets some variety
+        {
+            switch (i % 4)
+            {
+                case 0:
+                    uvs[i * 2] = texture.minU();
+                    uvs[i * 2 + 1] = texture.minV();
+                    break;
+                case 1:
+                    uvs[i * 2] = texture.maxU();
+                    uvs[i * 2 + 1] = texture.minV();
+                    break;
+                case 2:
+                    uvs[i * 2] = texture.maxU();
+                    uvs[i * 2 + 1] = texture.maxV();
+                    break;
+                case 3:
+                    uvs[i * 2] = texture.minU();
+                    uvs[i * 2 + 1] = texture.maxV();
+                    break;
+            }
+        }
+
+        return uvs;
     }
 }

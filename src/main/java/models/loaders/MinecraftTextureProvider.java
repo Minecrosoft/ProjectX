@@ -64,13 +64,13 @@ public class MinecraftTextureProvider implements TextureProvider
         @Override
         public float maxU()
         {
-            return 0;
+            return 1;
         }
 
         @Override
         public float minV()
         {
-            return 1;
+            return 0;
         }
 
         @Override

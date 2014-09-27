@@ -31,5 +31,5 @@ public class Animation
     /** the duration in seconds **/
     public float duration;
     /** the animation curves for individual nodes **/
-    public List<NodeAnimation> nodeAnimations = new ArrayList<>();
+    public final List<NodeAnimation> nodeAnimations = new ArrayList<>();
 }
