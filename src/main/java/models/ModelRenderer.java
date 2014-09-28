@@ -25,6 +25,7 @@ import models.data.IndexData;
 import models.data.VertexAttribute;
 import models.data.VertexAttributes;
 import models.data.VertexData;
+import models.textures.Texture;
 import models.utils.MathUtils;
 import models.utils.MatrixMathUtils;
 import net.minecraft.client.renderer.GLAllocation;

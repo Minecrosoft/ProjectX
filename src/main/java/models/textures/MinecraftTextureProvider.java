@@ -16,9 +16,8 @@
  * limitations under the License.
  */
 
-package models.loaders;
+package models.textures;
 
-import models.TextureProvider;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 
@@ -40,7 +39,7 @@ public class MinecraftTextureProvider implements TextureProvider
         return new Texture(new ResourceLocation(basePath + textureName));
     }
 
-    public static class Texture implements models.Texture
+    public static class Texture implements models.textures.Texture
     {
         private ResourceLocation resourceLocation;
 

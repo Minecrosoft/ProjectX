@@ -19,9 +19,8 @@
 package models.loaders;
 
 import models.Model;
-import models.TextureProvider;
+import models.textures.TextureProvider;
 
-import java.io.InputStream;
 import java.io.Reader;
 
 /**

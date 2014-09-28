@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package models;
+package models.textures;
 
 /**
  * Created by lukas on 27.09.14.

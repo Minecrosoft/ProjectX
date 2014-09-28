@@ -19,6 +19,7 @@
 package models.loaders;
 
 import models.Model;
+import models.textures.MinecraftTextureProvider;
 import net.minecraft.util.ResourceLocation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

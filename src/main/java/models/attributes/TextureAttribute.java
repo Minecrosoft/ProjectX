@@ -19,8 +19,8 @@
 package models.attributes;
 
 import models.Attribute;
-import models.Texture;
-import models.TextureSub;
+import models.textures.Texture;
+import models.textures.TextureSub;
 
 public class TextureAttribute extends Attribute
 {

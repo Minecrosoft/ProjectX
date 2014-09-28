@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package models;
+package models.textures;
 
 import models.utils.MathUtils;
 
