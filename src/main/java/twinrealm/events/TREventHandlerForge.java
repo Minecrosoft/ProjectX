@@ -8,6 +8,8 @@ import models.Model;
 import models.ModelRenderer;
 import models.animation.Animator;
 import models.loaders.MinecraftModelLoader;
+import models.textures.MinecraftIconProvider;
+import models.textures.MinecraftTextureProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -22,15 +24,6 @@ public class TREventHandlerForge
     Model model;
     Animator animator;
 
-    public TREventHandlerForge()
-    {
-        model = MinecraftModelLoader.loadModelG3DJ(new ResourceLocation(TwinRealm.MODID, "models/SquishCube.g3dj"), TwinRealm.textureBase + TwinRealm.pathModTextures);
-
-        Animation animation = model.animationForID("Cube|CubeAction");
-        if (animation != null)
-            animator = new Animator(animation, true);
-    }
-
     public void register()
     {
         MinecraftForge.EVENT_BUS.register(this);
@@ -41,6 +34,16 @@ public class TREventHandlerForge
 //    public void onRenderLiving(RenderLivingEvent.Pre event)
 //    {
 //        event.setCanceled(true);
+//
+//        if (model == null)
+//        {
+//            model = MinecraftModelLoader.loadModelG3DJ(new ResourceLocation(TwinRealm.MODID, "models/SquishCube.g3dj"),
+//                    new MinecraftTextureProvider(TwinRealm.MODID + TwinRealm.pathModTextures));
+//
+//            Animation animation = model.animationForID("Cube|CubeAction");
+//            if (animation != null)
+//                animator = new Animator(animation, true);
+//        }
 //
 //        if (animator != null)
 //            animator.update(event.entity.ticksExisted * 2500.0f / 20.0f, 1.0f);
