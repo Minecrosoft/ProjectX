@@ -25,6 +25,7 @@ import models.data.IndexData;
 import models.data.VertexAttribute;
 import models.data.VertexAttributes;
 import models.data.VertexData;
+import models.utils.MathUtils;
 import models.utils.MatrixMathUtils;
 import net.minecraft.client.renderer.GLAllocation;
 import org.lwjgl.opengl.GL11;
@@ -113,13 +114,17 @@ public class ModelRenderer
                 {
                     int vertexIndex = indexBuf.get(i) * vertexLengthInFloats;
 
-                    if (textureCoordAttr != null)
+                    if (texture != null)
                     {
-                        int textureIndex = vertexIndex + (textureCoordAttr.offset >> 2);
-                        GL11.glTexCoord2f(vertexBuf.get(textureIndex), vertexBuf.get(textureIndex + 1));
+                        if (textureCoordAttr != null)
+                        {
+                            int textureIndex = vertexIndex + (textureCoordAttr.offset >> 2);
+                            GL11.glTexCoord2f(MathUtils.mix(texture.minU(), texture.maxU(), vertexBuf.get(textureIndex)),
+                                    MathUtils.mix(texture.minV(), texture.maxV(), vertexBuf.get(textureIndex + 1)));
+                        }
+                        else if (uvs != null)
+                            GL11.glTexCoord2f(uvs[i * 2], uvs[i * 2 + 1]);
                     }
-                    else if (uvs != null)
-                        GL11.glTexCoord2f(uvs[i * 2], uvs[i * 2 + 1]);
 
                     int posIndex = vertexIndex + (posAttr.offset >> 2);
                     GL11.glVertex3f(vertexBuf.get(posIndex), vertexBuf.get(posIndex + 1), vertexBuf.get(posIndex + 2));
