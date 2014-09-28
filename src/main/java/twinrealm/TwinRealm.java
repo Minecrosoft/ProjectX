@@ -74,9 +74,9 @@ public class TwinRealm
 
         TRCreativeTabs.init();
 
-        TRBiomeGenBase.init();
+        registerBlocksAndItems();
 
-        registerBlocks();
+        TRBiomeGenBase.init();
     }
 
     @Mod.EventHandler
@@ -97,7 +97,7 @@ public class TwinRealm
         event.registerServerCommand(new CommandSetDimension());
     }
 
-    private void registerBlocks()
+    private void registerBlocksAndItems()
     {
         TRBlocks.redRock = new TRBaseRock().setBlockName("redRock").setBlockTextureName(textureBase + "redRock");
         GameRegistry.registerBlock(TRBlocks.redRock, ItemBlock.class, "red_rock");
@@ -111,5 +111,4 @@ public class TwinRealm
         TRBlocks.limestone = new TRBaseRock().setBlockName("limestone").setBlockTextureName(textureBase + "limestone");
         GameRegistry.registerBlock(TRBlocks.limestone, ItemBlock.class, "limestone");
     }
-
 }
