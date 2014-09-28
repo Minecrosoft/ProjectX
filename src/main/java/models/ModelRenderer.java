@@ -29,6 +29,7 @@ import models.textures.Texture;
 import models.utils.MathUtils;
 import models.utils.MatrixMathUtils;
 import net.minecraft.client.renderer.GLAllocation;
+import net.minecraft.client.renderer.Tessellator;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Matrix4f;
 
@@ -44,6 +45,8 @@ public class ModelRenderer
 
     public static void renderModelDirectly(Model model)
     {
+        Tessellator tessellator = Tessellator.instance;
+
         for (Node node : model.nodes)
         {
             GL11.glPushMatrix();
@@ -110,7 +113,7 @@ public class ModelRenderer
                 else
                     GL11.glDisable(GL11.GL_TEXTURE_2D);
 
-                GL11.glBegin(meshPart.primitiveType);
+                tessellator.startDrawing(meshPart.primitiveType);
                 for (int i = meshPart.indexOffset; i < meshPart.numVertices + meshPart.indexOffset; i++)
                 {
                     int vertexIndex = indexBuf.get(i) * vertexLengthInFloats;
@@ -120,17 +123,17 @@ public class ModelRenderer
                         if (textureCoordAttr != null)
                         {
                             int textureIndex = vertexIndex + (textureCoordAttr.offset >> 2);
-                            GL11.glTexCoord2f(MathUtils.mix(texture.minU(), texture.maxU(), vertexBuf.get(textureIndex)),
+                            tessellator.setTextureUV(MathUtils.mix(texture.minU(), texture.maxU(), vertexBuf.get(textureIndex)),
                                     MathUtils.mix(texture.minV(), texture.maxV(), vertexBuf.get(textureIndex + 1)));
                         }
                         else if (uvs != null)
-                            GL11.glTexCoord2f(uvs[i * 2], uvs[i * 2 + 1]);
+                            tessellator.setTextureUV(uvs[i * 2], uvs[i * 2 + 1]);
                     }
 
                     int posIndex = vertexIndex + (posAttr.offset >> 2);
-                    GL11.glVertex3f(vertexBuf.get(posIndex), vertexBuf.get(posIndex + 1), vertexBuf.get(posIndex + 2));
+                    tessellator.addVertex(vertexBuf.get(posIndex), vertexBuf.get(posIndex + 1), vertexBuf.get(posIndex + 2));
                 }
-                GL11.glEnd();
+                tessellator.draw();
 
                 if (texture == null)
                     GL11.glEnable(GL11.GL_TEXTURE_2D);

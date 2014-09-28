@@ -38,7 +38,7 @@ public class TREventHandlerForge
 //        if (model == null)
 //        {
 //            model = MinecraftModelLoader.loadModelG3DJ(new ResourceLocation(TwinRealm.MODID, "models/SquishCube.g3dj"),
-//                    new MinecraftTextureProvider(TwinRealm.MODID + TwinRealm.pathModTextures));
+//                    new MinecraftTextureProvider(TwinRealm.textureBase + TwinRealm.pathModTextures));
 //
 //            Animation animation = model.animationForID("Cube|CubeAction");
 //            if (animation != null)
