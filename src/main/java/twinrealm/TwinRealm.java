@@ -1,18 +1,10 @@
 package twinrealm;
 
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.event.FMLServerStartingEvent;
-import cpw.mods.fml.common.registry.GameRegistry;
-import net.minecraft.item.ItemBlock;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.config.Configuration;
+
 import org.apache.logging.log4j.Logger;
-import twinrealm.blocks.*;
-import twinrealm.blocks.TRBlocks;
+
 import twinrealm.configuration.TRConfig;
 import twinrealm.creativetab.TRCreativeTabs;
 import twinrealm.events.TREventHandlerFML;
@@ -22,11 +14,18 @@ import twinrealm.server.commands.CommandSetDimension;
 import twinrealm.worldgen.TRDimensions;
 import twinrealm.worldgen.WorldProviderTwinRealm;
 import twinrealm.worldgen.biomes.TRBiomeGenBase;
+import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.SidedProxy;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerStartingEvent;
 
 /**
  * Created by lukas on 15.09.14.
  */
-@Mod(modid = TwinRealm.MODID, version = TwinRealm.VERSION, name = TwinRealm.NAME, guiFactory = "twinrealm.gui.TRConfigGuiFactory")
+@Mod(modid = TwinRealm.MODID, version = TwinRealm.VERSION, name = TwinRealm.NAME, guiFactory = "twinrealm.gui.TRConfigGuiFactory",
+    dependencies = "required-after:malisiscore;required-after:ivtoolkit;required-after:reccomplex")
 public class TwinRealm
 {
     public static final String NAME = "Twin Realm";
@@ -74,7 +73,7 @@ public class TwinRealm
 
         TRCreativeTabs.init();
 
-        registerBlocksAndItems();
+        Registers.init();
 
         TRBiomeGenBase.init();
     }
@@ -95,20 +94,5 @@ public class TwinRealm
     public void onServerStart(FMLServerStartingEvent event)
     {
         event.registerServerCommand(new CommandSetDimension());
-    }
-
-    private void registerBlocksAndItems()
-    {
-        TRBlocks.redRock = new TRBaseRock().setBlockName("redRock").setBlockTextureName(textureBase + "redRock");
-        GameRegistry.registerBlock(TRBlocks.redRock, ItemBlock.class, "red_rock");
-
-        TRBlocks.redDirt = new TRBaseDirt().setBlockName("redDirt").setBlockTextureName(textureBase + "redDirt");
-        GameRegistry.registerBlock(TRBlocks.redDirt, ItemBlock.class, "red_dirt");
-
-        TRBlocks.yellowDirt = new TRBaseSand().setBlockName("yellowDirt").setBlockTextureName(textureBase + "yellowDirt");
-        GameRegistry.registerBlock(TRBlocks.yellowDirt, ItemBlock.class, "yellow_dirt");
-
-        TRBlocks.limestone = new TRBaseRock().setBlockName("limestone").setBlockTextureName(textureBase + "limestone");
-        GameRegistry.registerBlock(TRBlocks.limestone, ItemBlock.class, "limestone");
     }
 }
