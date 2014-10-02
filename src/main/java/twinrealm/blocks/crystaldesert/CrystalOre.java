@@ -42,6 +42,12 @@ public class CrystalOre extends TRBaseRock
     }
 
     @Override
+    public void onBlockAdded(World world, int x, int y, int z)
+    {
+       world.setBlockMetadataWithNotify(x, y, z, world.rand.nextInt(variants), 2);
+    }
+
+    @Override
     public int onBlockPlaced(World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ, int metadata)
     {
         return world.rand.nextInt(variants);

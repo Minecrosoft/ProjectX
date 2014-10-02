@@ -15,6 +15,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.gen.feature.WorldGenDeadBush;
+import net.minecraft.world.gen.feature.WorldGenMinable;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.terraingen.OreGenEvent;
+import net.minecraftforge.event.terraingen.OreGenEvent.GenerateMinable.EventType;
 import net.minecraftforge.event.terraingen.TerrainGen;
 import twinrealm.TwinRealm;
 import twinrealm.blocks.TRBlocks;
@@ -25,6 +29,10 @@ import twinrealm.blocks.TRBlocks;
 public class BiomeGenCrystalDesert extends BiomeGenBase
 {
     private int bushPerChunk = 4;
+    private int crystalPerChunk = 16;
+    private WorldGenDeadBush genBush;
+    private WorldGenMinable genCrystal;
+
 
     public BiomeGenCrystalDesert(int biomeID)
     {
@@ -38,6 +46,8 @@ public class BiomeGenCrystalDesert extends BiomeGenBase
 
         this.spawnableCreatureList.clear();
 
+        genCrystal = new WorldGenMinable(TRBlocks.crystalOre, 8, TRBlocks.crystalRock);
+        genBush = new WorldGenDeadBush(TRBlocks.deadCrystalBush);
     }
 
     @Override
@@ -69,7 +79,7 @@ public class BiomeGenCrystalDesert extends BiomeGenBase
                 {
                     if (currentBlock == Blocks.stone)
                     {
-                        blocks[blockIndex] = fillerBlock;
+                        blocks[blockIndex] = TRBlocks.crystalRock;
 
                         //first run down
                         if (fillerLeft == -1)
@@ -144,14 +154,43 @@ public class BiomeGenCrystalDesert extends BiomeGenBase
     @Override
     public void decorate(World world, Random rand, int chunkX, int chunkZ)
     {
+       generateDeadBushes(world, rand, chunkX, chunkZ);
+
+       MinecraftForge.ORE_GEN_BUS.post(new OreGenEvent.Pre(world, rand, chunkX, chunkZ));
+
+       generateCrystals(world, rand, chunkX, chunkZ);
+
+       MinecraftForge.ORE_GEN_BUS.post(new OreGenEvent.Post(world, rand, chunkX, chunkZ));
+
+    }
+
+    private void generateCrystals(World world, Random rand, int chunkX, int chunkZ)
+    {
+        if (!TerrainGen.generateOre(world, rand, genCrystal, chunkX, chunkZ, EventType.CUSTOM))
+            return;
+
+        int minHeight = 0, maxHeight = 96;
+        for (int i = 0; i < crystalPerChunk; i++)
+        {
+            int x = chunkX + rand.nextInt(16);
+            int y = rand.nextInt(maxHeight - minHeight) + minHeight;
+            int z = chunkZ + rand.nextInt(16);
+            genCrystal.generate(world, rand, x, y, z);
+        }
+    }
+
+    private void generateDeadBushes(World world, Random rand, int chunkX, int chunkZ)
+    {
         //copied from BiomeDecorator.genDecorations()
-        boolean doGen = TerrainGen.decorate(world, rand, chunkX, chunkZ, DEAD_BUSH);
-        for (int i = 0; doGen && i < bushPerChunk; i++)
+        if(!TerrainGen.decorate(world, rand, chunkX, chunkZ, DEAD_BUSH))
+            return;
+
+        for (int i = 0; i < bushPerChunk; i++)
         {
             int x = chunkX + rand.nextInt(16) + 8;
             int z = chunkZ + rand.nextInt(16) + 8;
             int y = rand.nextInt(world.getHeightValue(x, z) * 2);
-            (new WorldGenDeadBush(TRBlocks.deadCrystalBush)).generate(world, rand, x, y, z);
+            genBush.generate(world, rand, x, y, z);
         }
     }
 
