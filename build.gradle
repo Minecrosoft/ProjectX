@@ -58,13 +58,5 @@ processResources
     }
 }
 
-runClient {
-    args "-Dfml.coreMods.load=net.malisis.core.asm.MalisisCorePlugin,ivorius.ivtoolkit.IvToolkitLoadingPlugin"
-}
-
-runServer {
-    args "-Dfml.coreMods.load=net.malisis.core.asm.MalisisCorePlugin,ivorius.ivtoolkit.IvToolkitLoadingPlugin"
-}
-
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
