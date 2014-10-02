@@ -1,26 +1,3 @@
-/*
- * The MIT License (MIT)
- *
- * Copyright (c) 2014 Ordinastie
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- */
 
 package twinrealm;
 
@@ -29,6 +6,10 @@ import net.minecraft.item.ItemBlock;
 import twinrealm.blocks.TRBaseDirt;
 import twinrealm.blocks.TRBaseRock;
 import twinrealm.blocks.TRBaseSand;
+import twinrealm.blocks.crystaldesert.CrystalOre;
+import twinrealm.blocks.crystaldesert.CrystalRock;
+import twinrealm.blocks.crystaldesert.CrystalSand;
+import twinrealm.blocks.crystaldesert.DeadCrystalBush;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 /**
@@ -52,5 +33,29 @@ public class Registers
 
         limestone = new TRBaseRock().setBlockName("limestone").setBlockTextureName(textureBase + "limestone");
         GameRegistry.registerBlock(limestone, ItemBlock.class, "limestone");
+
+        registerDesertBlocks();
     }
+
+
+
+    public static void registerDesertBlocks()
+    {
+        crystalSand = new CrystalSand().setBlockName("crystalSand").setBlockTextureName(textureBase + "crystalSand");
+        GameRegistry.registerBlock(crystalSand, "crystalSand");
+
+        crystalRock = new CrystalRock().setBlockName("crystalRock").setBlockTextureName(textureBase + "crystalRock");
+        GameRegistry.registerBlock(crystalRock, "crystalRock");
+
+        crystalOre = new CrystalOre().setBlockName("crystalOre");
+        GameRegistry.registerBlock(crystalOre, "crystalOre");
+
+        //quickSand = new QuickSand().setBlockName("quickSand").setBlockTextureName(textureBase + "quickSand");
+        //GameRegistry.registerBlock(quickSand, "quickSand");
+
+        deadCrystalBush = new DeadCrystalBush().setBlockName("deadCrystalBush").setBlockTextureName(textureBase + "deadCrystalBush");
+        GameRegistry.registerBlock(deadCrystalBush, "deadCrystalBush");
+    }
+
+
 }
