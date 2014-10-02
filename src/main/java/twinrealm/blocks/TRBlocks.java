@@ -16,4 +16,8 @@ public final class TRBlocks
     public static Block crystalOre;
     public static Block quickSand;
     public static Block deadCrystalBush;
+    
+    public static Block hillDirt;
+    public static BlockHillGrass hillGrass;
+
 }

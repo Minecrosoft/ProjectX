@@ -29,6 +29,6 @@ public final class TRBiomeGenBase
         swamp = (new BiomeGenTRSwamp(133)).setColor(0x7f9b2).setBiomeName("Swamps of Yung");
 
         ocean = (new BiomeGenTROcean(134)).setColor(0x70).setBiomeName("Twin Ocean");
-        deepOcean = (new BiomeGenTROcean(135)).setColor(0x70).setBiomeName("Deep Twin sOcean");
+        deepOcean = (new BiomeGenTROcean(135)).setColor(0x70).setBiomeName("Deep Twin Ocean");
     }
 }
