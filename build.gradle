@@ -58,5 +58,17 @@ processResources
     }
 }
 
+task copyCoremods(type: Copy, dependsOn: "extractUserDev") 
+{
+	from { configurations.compile }
+	include "**/IvToolkit*.jar", "**/MalisisCore*.jar"
+	into file(minecraft.runDir + "/mods")
+	mustRunAfter "deobfBinJar"
+	mustRunAfter "repackMinecraft"
+}
+tasks.setupDevWorkspace.dependsOn copyCoremods
+tasks.setupDecompWorkspace.dependsOn copyCoremods
+
+
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
