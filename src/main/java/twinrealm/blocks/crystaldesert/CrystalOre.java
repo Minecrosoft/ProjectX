@@ -1,4 +1,3 @@
-
 package twinrealm.blocks.crystaldesert;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -25,7 +24,7 @@ public class CrystalOre extends TRBaseRock
     public void registerBlockIcons(IIconRegister register)
     {
         overlays = new IIcon[variants];
-        for(int i = 0; i < variants; i++)
+        for (int i = 0; i < variants; i++)
             overlays[i] = register.registerIcon(TwinRealm.MODID + ":crystalOre_overlay" + i);
     }
 
@@ -37,7 +36,7 @@ public class CrystalOre extends TRBaseRock
 
     public IIcon getIconOverlay(int metadata)
     {
-        if(metadata >= variants)
+        if (metadata >= variants)
             metadata = 0;
         return overlays[metadata];
     }
@@ -60,13 +59,11 @@ public class CrystalOre extends TRBaseRock
         return TRBlocks.crystalRock.colorMultiplier(world, x, y, z);
     }
 
-
     @Override
     public int getRenderBlockPass()
     {
         return 1;
     }
-
 
     @Override
     public boolean canRenderInPass(int pass)
@@ -78,6 +75,6 @@ public class CrystalOre extends TRBaseRock
     @Override
     public int getRenderType()
     {
-      return renderId;
+        return renderId;
     }
 }

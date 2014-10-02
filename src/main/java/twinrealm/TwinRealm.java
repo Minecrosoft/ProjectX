@@ -82,6 +82,7 @@ public class TwinRealm
     public void load(FMLInitializationEvent event)
     {
         proxy.registerRenderers();
+        proxy.registerReloadListeners();
     }
 
     @Mod.EventHandler

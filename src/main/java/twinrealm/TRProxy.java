@@ -8,4 +8,6 @@ public interface TRProxy
     void registerRenderers();
 
     void loadConfig(String configID);
+    
+    void registerReloadListeners();
 }

@@ -18,4 +18,10 @@ public class TRServerProxy implements TRProxy
     {
 
     }
+
+	@Override
+	public void registerReloadListeners()
+	{
+		
+	}
 }
