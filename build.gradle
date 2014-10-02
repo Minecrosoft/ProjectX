@@ -23,7 +23,7 @@ archivesBaseName = "TwinRealm"
 
 minecraft {
     version = "1.7.10-10.13.0.1208"
-    assetDir = "eclipse/assets"
+    runDir = "eclipse"
 }
 
 jar {
@@ -58,10 +58,9 @@ processResources
     }
 }
 
-task copyCoremods(type: Copy, dependsOn: "extractUserDev") 
-{
+task copyCoremods(type: Copy, dependsOn: "extractUserDev")  {
 	from { configurations.compile }
-	include "**/IvToolkit*.jar", "**/MalisisCore*.jar"
+	include "**/IvToolkit*.jar", "**/malisiscore*.jar"
 	into file(minecraft.runDir + "/mods")
 	mustRunAfter "deobfBinJar"
 	mustRunAfter "repackMinecraft"
