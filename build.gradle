@@ -58,16 +58,13 @@ processResources
     }
 }
 
-task copyCoremods(type: Copy, dependsOn: "extractUserDev")  {
-	from { configurations.compile }
-	include "**/IvToolkit*.jar", "**/malisiscore*.jar"
-	into file(minecraft.runDir + "/mods")
-	mustRunAfter "deobfBinJar"
-	mustRunAfter "repackMinecraft"
+runClient {
+    args "-Dfml.coreMods.load=net.malisis.core.asm.MalisisCorePlugin,ivorius.ivtoolkit.IvToolkitLoadingPlugin"
 }
-tasks.setupDevWorkspace.dependsOn copyCoremods
-tasks.setupDecompWorkspace.dependsOn copyCoremods
 
+runServer {
+    args "-Dfml.coreMods.load=net.malisis.core.asm.MalisisCorePlugin,ivorius.ivtoolkit.IvToolkitLoadingPlugin"
+}
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
