@@ -4,10 +4,11 @@ package twinrealm.blocks.crystaldesert;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 import twinrealm.TwinRealm;
 import twinrealm.blocks.TRBaseRock;
+import twinrealm.blocks.TRBlocks;
 import twinrealm.renderer.CrystalOreRenderer;
-import twinrealm.worldgen.biomes.BiomeGenCrystalDesert;
 
 /**
  * @author Ordinastie
@@ -18,34 +19,45 @@ public class CrystalOre extends TRBaseRock
     public static int renderId;
 
     private IIcon overlays[];
+    private int variants = 5;
 
     @Override
     public void registerBlockIcons(IIconRegister register)
     {
-        super.registerBlockIcons(register);
-        int n = 5;
-        overlays = new IIcon[n + 1];
-        for(int i = 1; i < n + 1; i++)
+        overlays = new IIcon[variants];
+        for(int i = 0; i < variants; i++)
             overlays[i] = register.registerIcon(TwinRealm.MODID + ":crystalOre_overlay" + i);
+    }
+
+    @Override
+    public IIcon getIcon(int side, int metadata)
+    {
+        return TRBlocks.crystalRock.getIcon(side, metadata);
     }
 
     public IIcon getIconOverlay(int metadata)
     {
-        if(metadata < 1 || metadata > overlays.length)
-            metadata = 1;
+        if(metadata >= variants)
+            metadata = 0;
         return overlays[metadata];
+    }
+
+    @Override
+    public int onBlockPlaced(World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ, int metadata)
+    {
+        return world.rand.nextInt(variants);
     }
 
     @Override
     public int getRenderColor(int metadata)
     {
-        return 0xFBC78B;
+        return TRBlocks.crystalRock.getRenderColor(metadata);
     }
 
     @Override
     public int colorMultiplier(IBlockAccess world, int x, int y, int z)
     {
-        return BiomeGenCrystalDesert.CrystalDesertColorizer.getCrystalColor(x, y, z);
+        return TRBlocks.crystalRock.colorMultiplier(world, x, y, z);
     }
 
 
