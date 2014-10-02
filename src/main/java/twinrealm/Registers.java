@@ -3,6 +3,7 @@ package twinrealm;
 
 import static twinrealm.blocks.TRBlocks.*;
 import net.minecraft.item.ItemBlock;
+import twinrealm.blocks.BlockHillGrass;
 import twinrealm.blocks.TRBaseDirt;
 import twinrealm.blocks.TRBaseRock;
 import twinrealm.blocks.TRBaseSand;
@@ -35,6 +36,12 @@ public class Registers
         GameRegistry.registerBlock(limestone, ItemBlock.class, "limestone");
 
         registerDesertBlocks();
+        
+        hillDirt = new TRBaseDirt().setBlockName("hillDirt").setBlockTextureName(textureBase + "hillDirt");
+        GameRegistry.registerBlock(hillDirt, ItemBlock.class, "hill_dirt");
+        
+        hillGrass = (BlockHillGrass) new BlockHillGrass().setBlockName("hillGrass").setBlockTextureName(textureBase + "hillGrass");
+        GameRegistry.registerBlock(hillGrass, ItemBlock.class, "hill_grass");
     }
 
 
