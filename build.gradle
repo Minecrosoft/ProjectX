@@ -32,7 +32,31 @@ jar {
     }
 }
 
+// Provided - Start
+
+apply plugin: 'idea'
+
+configurations {
+    provided
+//    provided.extendsFrom(compile)
+}
+
+sourceSets {
+    main { compileClasspath += [configurations.provided] }
+}
+
+idea {
+    module {
+        scopes.PROVIDED.plus += [configurations.provided]
+    }
+}
+
+// Provided - Stop
+
 dependencies {
+    provided 'net.malisis.malisiscore:malisiscore:1.7.10-0.9.6:dev'
+    provided 'ivorius.ivtoolkit:IvToolkit:1.0:dev'
+    provided 'ivorius.reccomplex:RecurrentComplex:0.9.2.1:dev'
 }
 
 processResources
