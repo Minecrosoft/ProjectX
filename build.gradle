@@ -33,6 +33,7 @@ jar {
 }
 
 // Provided - Start
+// FML doesnt laod coremods and ATs from the classpath
 
 apply plugin: 'idea'
 
@@ -78,6 +79,17 @@ processResources
         exclude 'mcmod.info'
     }
 }
+
+// FML doesnt laod coremods and ATs from the classpath
+task copyMods(type: Copy, dependsOn: "extractUserDev") {
+    from { configurations.provided }
+    include "**/*.jar"
+    into file(minecraft.runDir + "/mods")
+    mustRunAfter "deobfBinJar"
+    mustRunAfter "repackMinecraft"
+}
+tasks.setupDevWorkspace.dependsOn copyMods
+tasks.setupDecompWorkspace.dependsOn copyMods
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
