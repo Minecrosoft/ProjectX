@@ -33,9 +33,6 @@ jar {
 }
 
 dependencies {
-	compile 'net.malisis.malisiscore:malisiscore:1.7.10-0.9.6:dev'
-    compile 'ivorius.ivtoolkit:IvToolkit:1.0:dev'
-    compile 'ivorius.reccomplex:RecurrentComplex:0.9.2.1:dev'
 }
 
 processResources
