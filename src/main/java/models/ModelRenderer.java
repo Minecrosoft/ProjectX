@@ -41,6 +41,8 @@ import java.nio.ShortBuffer;
  */
 public class ModelRenderer
 {
+    private static final FloatBuffer MATRIX_BUFFER = GLAllocation.createDirectFloatBuffer(4 * 4);
+
     private static final float[] WHITE = new float[]{1.0f, 1.0f, 1.0f};
 
     public static void renderModelDirectly(Model model)
@@ -53,10 +55,7 @@ public class ModelRenderer
 
             Matrix4f nodeTransMat = new Matrix4f();
             MatrixMathUtils.setTRS(nodeTransMat, node.translation, node.rotation, node.scale);
-            FloatBuffer nodeTransMatBuffer = GLAllocation.createDirectFloatBuffer(4 * 4);
-            nodeTransMat.store(nodeTransMatBuffer);
-            nodeTransMatBuffer.position(0);
-            GL11.glMultMatrix(nodeTransMatBuffer);
+            glMultMatrix(nodeTransMat);
 
             for (NodePart nodePart : node.parts)
             {
@@ -144,6 +143,14 @@ public class ModelRenderer
 
             GL11.glPopMatrix();
         }
+    }
+
+    public static void glMultMatrix(Matrix4f matrix4f)
+    {
+        matrix4f.store(MATRIX_BUFFER);
+        MATRIX_BUFFER.position(0);
+        GL11.glMultMatrix(MATRIX_BUFFER);
+        MATRIX_BUFFER.rewind();
     }
 
     public static float[] guessUVs(int primitiveType, Texture texture, int length)
