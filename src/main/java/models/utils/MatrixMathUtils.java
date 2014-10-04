@@ -65,4 +65,30 @@ public class MatrixMathUtils
 
         return matrix;
     }
+
+    public static void mul(Matrix4f src, float alpha)
+    {
+        src.m00 *= alpha;
+        src.m01 *= alpha;
+        src.m02 *= alpha;
+        src.m10 *= alpha;
+        src.m11 *= alpha;
+        src.m12 *= alpha;
+        src.m20 *= alpha;
+        src.m21 *= alpha;
+        src.m22 *= alpha;
+    }
+
+    public static void add(Matrix4f src, Matrix4f dst, float alpha)
+    {
+        dst.m00 += src.m00 * alpha;
+        dst.m01 += src.m01 * alpha;
+        dst.m02 += src.m02 * alpha;
+        dst.m10 += src.m10 * alpha;
+        dst.m11 += src.m11 * alpha;
+        dst.m12 += src.m12 * alpha;
+        dst.m20 += src.m20 * alpha;
+        dst.m21 += src.m21 * alpha;
+        dst.m22 += src.m22 * alpha;
+    }
 }

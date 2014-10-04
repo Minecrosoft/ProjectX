@@ -89,11 +89,13 @@ public class G3DModelLoader implements ModelLoader
             return null;
         }
 
+        Map<String, Node> nodeMap = new HashMap<>();
+
         Model model = new Model();
         loadMeshes(model, Arrays.asList(g3DModel.meshes));
         loadMaterials(model, Arrays.asList(g3DModel.materials), textureProvider, logger);
-        loadNodes(model, Arrays.asList(g3DModel.nodes));
-        loadAnimations(model, Arrays.asList(g3DModel.animations));
+        loadNodes(model, Arrays.asList(g3DModel.nodes), nodeMap);
+        loadAnimations(model, Arrays.asList(g3DModel.animations), nodeMap);
         return model;
     }
 
@@ -139,7 +141,7 @@ public class G3DModelLoader implements ModelLoader
         return mesh;
     }
 
-    private static void loadNodes(Model model, Iterable<G3DNode> g3DNodes)
+    private static void loadNodes(Model model, List<G3DNode> g3DNodes, Map<String, Node> nodeMap)
     {
         Map<String, Material> materials = new HashMap<>();
         for (Material material : model.materials)
@@ -150,13 +152,17 @@ public class G3DModelLoader implements ModelLoader
             meshParts.put(meshPart.id, meshPart);
 
         for (G3DNode g3DNode : g3DNodes)
-            model.nodes.add(convertNode(g3DNode, materials, meshParts));
+            model.nodes.add(convertNodeWithoutParts(g3DNode, nodeMap));
+
+        for (int i = 0; i < g3DNodes.size(); i++)
+            convertNodeParts(model.nodes.get(i), g3DNodes.get(i), nodeMap, materials, meshParts);
     }
 
-    public static Node convertNode(G3DNode g3DNode, Map<String, Material> materials, Map<String, MeshPart> meshParts)
+    public static Node convertNodeWithoutParts(G3DNode g3DNode, Map<String, Node> nodeMap)
     {
         Node node = new Node();
         node.id = g3DNode.id;
+        nodeMap.put(node.id, node);
 
         if (g3DNode.translation != null)
             node.translation.set(g3DNode.translation);
@@ -167,18 +173,21 @@ public class G3DModelLoader implements ModelLoader
         if (g3DNode.scale != null)
             node.scale.set(g3DNode.scale);
 
-        if (g3DNode.parts != null)
-            for (G3DNodePart g3DNodePart : g3DNode.parts)
-                node.parts.add(convertNodePart(g3DNodePart, materials, meshParts));
-
         if (g3DNode.children != null)
             for (G3DNode child : g3DNode.children)
-                node.children.add(convertNode(child, materials, meshParts));
+                node.children.add(convertNodeWithoutParts(child, nodeMap));
 
         return node;
     }
 
-    public static NodePart convertNodePart(G3DNodePart g3DNodePart, Map<String, Material> materials, Map<String, MeshPart> meshParts)
+    public static void convertNodeParts(Node node, G3DNode g3DNode, Map<String, Node> nodes, Map<String, Material> materials, Map<String, MeshPart> meshParts)
+    {
+        if (g3DNode.parts != null)
+            for (G3DNodePart g3DNodePart : g3DNode.parts)
+                node.parts.add(convertNodePart(g3DNodePart, nodes, materials, meshParts));
+    }
+
+    public static NodePart convertNodePart(G3DNodePart g3DNodePart, Map<String, Node> nodes, Map<String, Material> materials, Map<String, MeshPart> meshParts)
     {
         NodePart nodePart = new NodePart();
 
@@ -187,6 +196,10 @@ public class G3DModelLoader implements ModelLoader
         nodePart.material = materials.get(g3DNodePart.materialid);
         if (nodePart.material == null)
             nodePart.material = new Material();
+
+        nodePart.bones = new Node[g3DNodePart.bones.length];
+        for (int i = 0; i < g3DNodePart.bones.length; i++)
+            nodePart.bones[i] = nodes.get(g3DNodePart.bones[i].node);
 
         return nodePart;
     }
@@ -257,12 +270,8 @@ public class G3DModelLoader implements ModelLoader
         return material;
     }
 
-    private static void loadAnimations(Model model, List<G3DAnimation> animations)
+    private static void loadAnimations(Model model, List<G3DAnimation> animations, Map<String, Node> nodes)
     {
-        Map<String, Node> nodes = new HashMap<>();
-        for (Node node : model.nodes)
-            nodes.put(node.id, node);
-
         for (G3DAnimation animation : animations)
             model.animations.add(convertAnimation(animation, nodes));
     }

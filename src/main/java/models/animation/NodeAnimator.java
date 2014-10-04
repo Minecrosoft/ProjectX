@@ -30,7 +30,7 @@ import java.util.List;
 /**
  * Created by lukas on 23.09.14.
  */
-public class NodeAnimator<F>
+public class NodeAnimator
 {
     private NodeAnimation nodeAnimation;
 
@@ -55,6 +55,14 @@ public class NodeAnimator<F>
             if (nodeKeyframe.rotation != null)
                 animatorRotation.addKeyframe(nodeKeyframe.rotation, nodeKeyframe.keytime);
         }
+
+        // No partial node animations allowed
+        if (animatorTranslation.keyframeCount() == 0)
+            animatorTranslation.addKeyframe(nodeAnimation.node.translation, 0.0f);
+        if (animatorScale.keyframeCount() == 0)
+            animatorScale.addKeyframe(nodeAnimation.node.scale, 0.0f);
+        if (animatorRotation.keyframeCount() == 0)
+            animatorRotation.addKeyframe(nodeAnimation.node.rotation, 0.0f);
     }
 
     public void update(float time, float alpha)

@@ -18,6 +18,7 @@
 
 package models;
 
+import models.utils.MatrixMathUtils;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Quaternion;
 import org.lwjgl.util.vector.Vector3f;
@@ -51,4 +52,21 @@ public class Node
     public final Matrix4f globalTransform = new Matrix4f();
 
     public List<NodePart> parts = new ArrayList<>(2);
+
+    public void calculateLocalTransform()
+    {
+        MatrixMathUtils.setTRS(localTransform, translation, rotation, scale);
+    }
+
+    public void calculateGlobalTransform()
+    {
+        calculateLocalTransform();
+
+        globalTransform.load(localTransform);
+        if (parent != null)
+            Matrix4f.mul(globalTransform, parent.globalTransform, globalTransform);
+
+        for (Node node : children)
+            node.calculateGlobalTransform();
+    }
 }

@@ -39,6 +39,11 @@ public abstract class NodeFieldAnimator<F>
         keyframes.add(new Keyframe(object, keyframe));
     }
 
+    public int keyframeCount()
+    {
+        return keyframes.size();
+    }
+
     public void update(F field, float time, float alpha)
     {
         InterpolatedKeyframe interpolatedKeyframe = interpolatedKeyframe(time);

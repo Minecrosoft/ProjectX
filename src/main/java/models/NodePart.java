@@ -36,7 +36,7 @@ public class NodePart
     public Map<Node, Matrix4f> invBoneBindTransforms;
     /** The current transformation (relative to the bind pose) of each bone, may be null. When the part is skinned, this will be
      * updated by a call to ModelInstance#calculateTransforms. Do not set or change this value manually. */
-    public Matrix4f[] bones;
+    public Node[] bones;
     /** true by default. If set to false, this part will not participate in rendering and bounding box calculation. */
     public boolean enabled = true;
 }

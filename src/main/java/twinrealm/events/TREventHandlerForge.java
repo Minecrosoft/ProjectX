@@ -37,10 +37,10 @@ public class TREventHandlerForge
 //
 //        if (model == null)
 //        {
-//            model = MinecraftModelLoader.loadModelG3DJ(new ResourceLocation(TwinRealm.MODID, "models/SquishCube.g3dj"),
+//            model = MinecraftModelLoader.loadModelG3DJ(new ResourceLocation(TwinRealm.MODID, "models/Figure.g3dj"),
 //                    new MinecraftTextureProvider(TwinRealm.textureBase + TwinRealm.pathModTextures));
 //
-//            Animation animation = model.animationForID("Cube|CubeAction");
+//            Animation animation = model.animationForID("Armature|2300_Climb1");
 //            if (animation != null)
 //                animator = new Animator(animation, true);
 //        }
