@@ -24,9 +24,6 @@ import models.NodeKeyframe;
 import org.lwjgl.util.vector.Quaternion;
 import org.lwjgl.util.vector.Vector3f;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by lukas on 23.09.14.
  */

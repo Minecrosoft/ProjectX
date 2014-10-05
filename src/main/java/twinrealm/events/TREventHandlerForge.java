@@ -40,7 +40,7 @@ public class TREventHandlerForge
 //            model = MinecraftModelLoader.loadModelG3DJ(new ResourceLocation(TwinRealm.MODID, "models/Figure.g3dj"),
 //                    new MinecraftTextureProvider(TwinRealm.textureBase + TwinRealm.pathModTextures));
 //
-//            Animation animation = model.animationForID("Armature|2300_Climb");
+//            Animation animation = model.animationForID("Armature|2300_Walk");
 //            if (animation != null)
 //                animator = new Animator(animation, true);
 //        }
@@ -51,6 +51,9 @@ public class TREventHandlerForge
 //        GL11.glDisable(GL11.GL_LIGHTING);
 //        GL11.glPushMatrix();
 //        GL11.glTranslated(event.x, event.y, event.z);
+//        GL11.glScaled(0.5f, 0.5f, 0.5f);
+//        float rot = event.entity.prevRotationYaw + (event.entity.rotationYaw - event.entity.prevRotationYaw) * 1.0f;
+//        GL11.glRotatef(rot, 0.0f, 1.0f, 0.0f);
 //        ModelRenderer.renderModelDirectly(model);
 //        GL11.glPopMatrix();
 //        GL11.glEnable(GL11.GL_LIGHTING);

@@ -54,8 +54,10 @@ public class Attributes implements Iterable<Attribute>, Comparator<Attribute>
      */
     public final Attribute get(final long type)
     {
-        if (has(type)) for (int i = 0; i < attributes.size(); i++)
-            if (attributes.get(i).type == type) return attributes.get(i);
+        if (has(type))
+            for (Attribute attribute : attributes)
+                if (attribute.type == type)
+                    return attribute;
         return null;
     }
 
@@ -75,8 +77,9 @@ public class Attributes implements Iterable<Attribute>, Comparator<Attribute>
      */
     public final List<Attribute> get(final List<Attribute> out, final long type)
     {
-        for (int i = 0; i < attributes.size(); i++)
-            if ((attributes.get(i).type & type) != 0) out.add(attributes.get(i));
+        for (Attribute attribute : attributes)
+            if ((attribute.type & type) != 0)
+                out.add(attribute);
         return out;
     }
 
@@ -104,7 +107,7 @@ public class Attributes implements Iterable<Attribute>, Comparator<Attribute>
 
     private final void disable(final long mask)
     {
-        this.mask &= -1L ^ mask;
+        this.mask &= ~mask;
     }
 
     /**
@@ -268,8 +271,8 @@ public class Attributes implements Iterable<Attribute>, Comparator<Attribute>
         final int n = attributes.size();
         int result = 71 + (int) mask;
         int m = 1;
-        for (int i = 0; i < n; i++)
-            result += mask * attributes.get(i).hashCode() * (m = (m * 7) & 0xFFFF);
+        for (Attribute attribute : attributes)
+            result += mask * attribute.hashCode() * (m = (m * 7) & 0xFFFF);
         return result;
     }
 

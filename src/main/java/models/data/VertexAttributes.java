@@ -77,8 +77,7 @@ public final class VertexAttributes implements Iterable<VertexAttribute>
         if (attributes.length == 0) throw new IllegalArgumentException("attributes must be >= 1");
 
         VertexAttribute[] list = new VertexAttribute[attributes.length];
-        for (int i = 0; i < attributes.length; i++)
-            list[i] = attributes[i];
+        System.arraycopy(attributes, 0, list, 0, attributes.length);
 
         this.attributes = list;
         vertexSize = calculateOffsets();
@@ -122,9 +121,8 @@ public final class VertexAttributes implements Iterable<VertexAttribute>
     private int calculateOffsets()
     {
         int count = 0;
-        for (int i = 0; i < attributes.length; i++)
+        for (VertexAttribute attribute : attributes)
         {
-            VertexAttribute attribute = attributes[i];
             attribute.offset = count;
             if (attribute.usage == Usage.ColorPacked)
                 count += 4;
@@ -156,14 +154,14 @@ public final class VertexAttributes implements Iterable<VertexAttribute>
     {
         StringBuilder builder = new StringBuilder();
         builder.append("[");
-        for (int i = 0; i < attributes.length; i++)
+        for (VertexAttribute attribute : attributes)
         {
             builder.append("(");
-            builder.append(attributes[i].usage);
+            builder.append(attribute.usage);
             builder.append(", ");
-            builder.append(attributes[i].numComponents);
+            builder.append(attribute.numComponents);
             builder.append(", ");
-            builder.append(attributes[i].offset);
+            builder.append(attribute.offset);
             builder.append(")");
             builder.append("\n");
         }
@@ -195,9 +193,9 @@ public final class VertexAttributes implements Iterable<VertexAttribute>
         if (mask == -1)
         {
             long result = 0;
-            for (int i = 0; i < attributes.length; i++)
+            for (VertexAttribute attribute : attributes)
             {
-                result |= attributes[i].usage;
+                result |= attribute.usage;
             }
             mask = result;
         }
@@ -207,7 +205,7 @@ public final class VertexAttributes implements Iterable<VertexAttribute>
     @Override
     public Iterator<VertexAttribute> iterator()
     {
-        if (iterable == null) iterable = new ReadonlyIterable<VertexAttribute>(attributes);
+        if (iterable == null) iterable = new ReadonlyIterable<>(attributes);
         return iterable.iterator();
     }
 

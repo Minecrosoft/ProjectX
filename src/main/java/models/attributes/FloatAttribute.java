@@ -52,10 +52,25 @@ public class FloatAttribute extends Attribute
 		return new FloatAttribute(type, value);
 	}
 
-	@Override
-	public int hashCode () {
-		int result = super.hashCode();
-//		result = 977 * result + NumberUtils.floatToRawIntBits(value);
-		return result; 
-	}
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        FloatAttribute that = (FloatAttribute) o;
+
+        if (Float.compare(that.value, value) != 0) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int result = super.hashCode();
+        result = 31 * result + (value != +0.0f ? Float.floatToIntBits(value) : 0);
+        return result;
+    }
 }

@@ -18,8 +18,6 @@
 
 package models;
 
-import com.sun.javafx.collections.transformation.SortedList;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -30,9 +28,13 @@ import java.util.List;
  */
 public class NodeAnimation implements Comparator<NodeKeyframe>
 {
-    /** the Node affected by this animation **/
+    /**
+     * the Node affected by this animation *
+     */
     public Node node;
-    /** the keyframes, sorted by time, ascending **/
+    /**
+     * the keyframes, sorted by time, ascending *
+     */
     public List<NodeKeyframe> keyframes = new ArrayList<>();
 
     public void addKeyframe(NodeKeyframe keyframe)

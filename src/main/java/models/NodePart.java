@@ -21,23 +21,31 @@ package models;
 import models.utils.ArrayMap;
 import org.lwjgl.util.vector.Matrix4f;
 
-import java.util.Map;
-
 /**
  * Created by lukas on 22.09.14.
  */
 public class NodePart
 {
-    /** The MeshPart (shape) to render. Must not be null. */
+    /**
+     * The MeshPart (shape) to render. Must not be null.
+     */
     public MeshPart meshPart;
-    /** The Material used to render the {@link #meshPart}. Must not be null. */
+    /**
+     * The Material used to render the {@link #meshPart}. Must not be null.
+     */
     public Material material;
-    /** Mapping to each bone (node) and the inverse transform of the bind pose. Will be used to fill the {@link #bones} array. May
-     * be null. */
+    /**
+     * Mapping to each bone (node) and the inverse transform of the bind pose. Will be used to fill the {@link #bones} array. May
+     * be null.
+     */
     public ArrayMap<Node, Matrix4f> invBoneBindTransforms;
-    /** The current transformation (relative to the bind pose) of each bone, may be null. When the part is skinned, this will be
-     * updated by a call to {@link Model#calculateTransforms()}. Do not set or change this value manually. */
+    /**
+     * The current transformation (relative to the bind pose) of each bone, may be null. When the part is skinned, this will be
+     * updated by a call to {@link Model#calculateTransforms()}. Do not set or change this value manually.
+     */
     public Matrix4f[] bones;
-    /** true by default. If set to false, this part will not participate in rendering and bounding box calculation. */
+    /**
+     * true by default. If set to false, this part will not participate in rendering and bounding box calculation.
+     */
     public boolean enabled = true;
 }
