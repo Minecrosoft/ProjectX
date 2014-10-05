@@ -31,24 +31,42 @@ import java.util.List;
  */
 public class Node
 {
-    /** the id, may be null, FIXME is this unique? **/
+    /**
+     * the id, may be null, FIXME is this unique? *
+     */
     public String id;
-    /** parent node, may be null **/
+    /**
+     * parent node, may be null *
+     */
     public Node parent;
-    /** child nodes **/
+    /**
+     * child nodes *
+     */
     public final List<Node> children = new ArrayList<>(2);
-    /** Whether this node is currently being animated, if so the translation, rotation and scale values are not used. */
+    /**
+     * Whether this node is currently being animated, if so the translation, rotation and scale values are not used.
+     */
     public boolean isAnimated;
-    /** the translation, relative to the parent, not modified by animations **/
+    /**
+     * the translation, relative to the parent, not modified by animations *
+     */
     public final Vector3f translation = new Vector3f();
-    /** the rotation, relative to the parent, not modified by animations **/
+    /**
+     * the rotation, relative to the parent, not modified by animations *
+     */
     public final Quaternion rotation = new Quaternion(0, 0, 0, 1);
-    /** the scale, relative to the parent, not modified by animations **/
+    /**
+     * the scale, relative to the parent, not modified by animations *
+     */
     public final Vector3f scale = new Vector3f(1, 1, 1);
-    /** the local transform, based on translation/rotation/scale calculateLocalTransform or any applied animation **/
+    /**
+     * the local transform, based on translation/rotation/scale calculateLocalTransform or any applied animation *
+     */
     public final Matrix4f localTransform = new Matrix4f();
-    /** the global transform, product of local transform and transform of the parent node, calculated via
-     * calculateWorldTransform **/
+    /**
+     * the global transform, product of local transform and transform of the parent node, calculated via
+     * calculateWorldTransform *
+     */
     public final Matrix4f globalTransform = new Matrix4f();
 
     public List<NodePart> parts = new ArrayList<>(2);
@@ -60,13 +78,45 @@ public class Node
 
     public void calculateGlobalTransform()
     {
-        calculateLocalTransform();
-
         globalTransform.load(localTransform);
         if (parent != null)
             Matrix4f.mul(globalTransform, parent.globalTransform, globalTransform);
+    }
 
-        for (Node node : children)
-            node.calculateGlobalTransform();
+    /**
+     * Calculates the local and world transform of this node and optionally all its children.
+     *
+     * @param recursive whether to calculate the local/world transforms for children.
+     */
+    public void calculateTransforms(boolean recursive)
+    {
+        calculateLocalTransform();
+        calculateGlobalTransform();
+
+        if (recursive)
+        {
+            for (Node child : children)
+                child.calculateTransforms(true);
+        }
+    }
+
+    public void calculateBoneTransforms(boolean recursive)
+    {
+        for (final NodePart part : parts)
+        {
+            if (part.invBoneBindTransforms == null || part.bones == null || part.invBoneBindTransforms.size != part.bones.length)
+                continue;
+            final int n = part.invBoneBindTransforms.size;
+            for (int i = 0; i < n; i++)
+            {
+                part.bones[i].load(part.invBoneBindTransforms.keys[i].globalTransform);
+                Matrix4f.mul(part.bones[i], part.invBoneBindTransforms.values[i], part.bones[i]);
+            }
+        }
+        if (recursive)
+        {
+            for (Node child : children)
+                child.calculateBoneTransforms(true);
+        }
     }
 }

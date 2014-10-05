@@ -18,6 +18,7 @@
 
 package models;
 
+import models.utils.ArrayMap;
 import org.lwjgl.util.vector.Matrix4f;
 
 import java.util.Map;
@@ -33,10 +34,10 @@ public class NodePart
     public Material material;
     /** Mapping to each bone (node) and the inverse transform of the bind pose. Will be used to fill the {@link #bones} array. May
      * be null. */
-    public Map<Node, Matrix4f> invBoneBindTransforms;
+    public ArrayMap<Node, Matrix4f> invBoneBindTransforms;
     /** The current transformation (relative to the bind pose) of each bone, may be null. When the part is skinned, this will be
-     * updated by a call to ModelInstance#calculateTransforms. Do not set or change this value manually. */
-    public Node[] bones;
+     * updated by a call to {@link Model#calculateTransforms()}. Do not set or change this value manually. */
+    public Matrix4f[] bones;
     /** true by default. If set to false, this part will not participate in rendering and bounding box calculation. */
     public boolean enabled = true;
 }

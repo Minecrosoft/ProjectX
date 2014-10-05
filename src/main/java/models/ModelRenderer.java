@@ -53,8 +53,7 @@ public class ModelRenderer
     {
         Tessellator tessellator = Tessellator.instance;
 
-        for (Node node : model.nodes)
-            node.calculateGlobalTransform();
+        model.calculateTransforms();
 
         for (Node node : model.nodes)
         {
@@ -79,9 +78,7 @@ public class ModelRenderer
     {
         MeshPart meshPart = nodePart.meshPart;
         Material material = nodePart.material;
-        Matrix4f[] transformations = new Matrix4f[nodePart.bones.length];
-        for (int i = 0; i < transformations.length; i++)
-            transformations[i] = nodePart.bones[i].globalTransform;
+        Matrix4f[] bones = nodePart.bones;
 
         Mesh mesh = meshPart.mesh;
         IndexData indexData = mesh.getIndices();
@@ -164,7 +161,7 @@ public class ModelRenderer
 
             if (boneWeightAttributes.size() > 0)
             {
-                buildMatrix(TEMP_MATRIX, boneWeightAttributes, vertexBuf, vertexIndex, transformations);
+                buildMatrix(TEMP_MATRIX, boneWeightAttributes, vertexBuf, vertexIndex, bones);
                 TEMP_VEC.set(vertexX, vertexY, vertexZ, 1.0f);
                 Matrix4f.transform(TEMP_MATRIX, TEMP_VEC, TEMP_VEC);
                 tessellator.addVertex(TEMP_VEC.x, TEMP_VEC.y, TEMP_VEC.z);

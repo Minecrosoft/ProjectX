@@ -35,9 +35,12 @@ import models.loaders.g3d.*;
 import models.textures.Texture;
 import models.textures.TextureProvider;
 import models.textures.TextureSub;
+import models.utils.ArrayMap;
 import models.utils.BufferUtils;
+import models.utils.MatrixMathUtils;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Quaternion;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
@@ -197,9 +200,19 @@ public class G3DModelLoader implements ModelLoader
         if (nodePart.material == null)
             nodePart.material = new Material();
 
-        nodePart.bones = new Node[g3DNodePart.bones.length];
+        nodePart.bones = new Matrix4f[g3DNodePart.bones.length];
+        nodePart.invBoneBindTransforms = new ArrayMap<>(Node.class, Matrix4f.class);
         for (int i = 0; i < g3DNodePart.bones.length; i++)
-            nodePart.bones[i] = nodes.get(g3DNodePart.bones[i].node);
+        {
+            G3DBone bone = g3DNodePart.bones[i];
+
+            nodePart.bones[i] = new Matrix4f();
+
+            Matrix4f matrix = new Matrix4f();
+            MatrixMathUtils.setTRS(matrix, bone.translation, bone.rotation, bone.scale);
+            Matrix4f.invert(matrix, matrix);
+            nodePart.invBoneBindTransforms.put(nodes.get(bone.node), matrix, i);
+        }
 
         return nodePart;
     }
