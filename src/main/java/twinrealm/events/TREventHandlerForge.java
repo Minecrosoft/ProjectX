@@ -40,13 +40,13 @@ public class TREventHandlerForge
 //            model = MinecraftModelLoader.loadModelG3DJ(new ResourceLocation(TwinRealm.MODID, "models/Figure.g3dj"),
 //                    new MinecraftTextureProvider(TwinRealm.textureBase + TwinRealm.pathModTextures));
 //
-//            Animation animation = model.animationForID("Armature|2300_Climb1");
+//            Animation animation = model.animationForID("Armature|2300_Climb");
 //            if (animation != null)
 //                animator = new Animator(animation, true);
 //        }
 //
 //        if (animator != null)
-//            animator.update(event.entity.ticksExisted * 2500.0f / 20.0f, 1.0f);
+//            animator.update(event.entity.ticksExisted * 2500.0f / 60.0f, 1.0f);
 //
 //        GL11.glDisable(GL11.GL_LIGHTING);
 //        GL11.glPushMatrix();

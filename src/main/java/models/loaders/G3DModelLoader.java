@@ -177,8 +177,12 @@ public class G3DModelLoader implements ModelLoader
             node.scale.set(g3DNode.scale);
 
         if (g3DNode.children != null)
-            for (G3DNode child : g3DNode.children)
-                node.children.add(convertNodeWithoutParts(child, nodeMap));
+            for (G3DNode g3dChild : g3DNode.children)
+            {
+                Node child = convertNodeWithoutParts(g3dChild, nodeMap);
+                node.children.add(child);
+                child.parent = node;
+            }
 
         return node;
     }

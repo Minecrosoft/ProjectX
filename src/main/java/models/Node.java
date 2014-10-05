@@ -80,7 +80,7 @@ public class Node
     {
         globalTransform.load(localTransform);
         if (parent != null)
-            Matrix4f.mul(globalTransform, parent.globalTransform, globalTransform);
+            Matrix4f.mul(parent.globalTransform, globalTransform, globalTransform);
     }
 
     /**

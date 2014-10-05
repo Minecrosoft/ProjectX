@@ -184,10 +184,11 @@ public class ModelRenderer
 
         for (VertexAttribute attribute : boneWeightAttributes)
         {
-            float alpha = floatBuffer.get(vertexIndex + (attribute.offset >> 2) + 1);
+            int attributeIndex = vertexIndex + (attribute.offset >> 2);
+            float alpha = floatBuffer.get(attributeIndex + 1);
             if (alpha > 0.00001f)
             {
-                Matrix4f bone = bones[MathUtils.floorInt(floatBuffer.get(vertexIndex + (attribute.offset >> 2)) + 0.5f)];
+                Matrix4f bone = bones[(int) floatBuffer.get(attributeIndex)];
                 MatrixMathUtils.add(bone, dst, alpha);
             }
         }
