@@ -2,6 +2,7 @@
 package twinrealm;
 
 import static twinrealm.blocks.TRBlocks.*;
+import static twinrealm.items.TRItems.*;
 import net.minecraft.item.ItemBlock;
 import twinrealm.blocks.BlockHillGrass;
 import twinrealm.blocks.TRBaseDirt;
@@ -11,6 +12,7 @@ import twinrealm.blocks.crystaldesert.CrystalOre;
 import twinrealm.blocks.crystaldesert.CrystalRock;
 import twinrealm.blocks.crystaldesert.CrystalSand;
 import twinrealm.blocks.crystaldesert.DeadCrystalBush;
+import twinrealm.items.crystaldesert.CrystalItem;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 /**
@@ -35,19 +37,19 @@ public class Registers
         limestone = new TRBaseRock().setBlockName("limestone").setBlockTextureName(textureBase + "limestone");
         GameRegistry.registerBlock(limestone, ItemBlock.class, "limestone");
 
-        registerDesertBlocks();
-        
         hillDirt = new TRBaseDirt().setBlockName("hillDirt").setBlockTextureName(textureBase + "hillDirt");
         GameRegistry.registerBlock(hillDirt, ItemBlock.class, "hill_dirt");
-        
+
         hillGrass = (BlockHillGrass) new BlockHillGrass().setBlockName("hillGrass").setBlockTextureName(textureBase + "hillGrass");
         GameRegistry.registerBlock(hillGrass, ItemBlock.class, "hill_grass");
+
+        registerDesertCrystal();
     }
 
 
-
-    public static void registerDesertBlocks()
+    public static void registerDesertCrystal()
     {
+        //blocks
         crystalSand = new CrystalSand().setBlockName("crystalSand").setBlockTextureName(textureBase + "crystalSand");
         GameRegistry.registerBlock(crystalSand, "crystalSand");
 
@@ -62,7 +64,10 @@ public class Registers
 
         deadCrystalBush = new DeadCrystalBush().setBlockName("deadCrystalBush").setBlockTextureName(textureBase + "deadCrystalBush");
         GameRegistry.registerBlock(deadCrystalBush, "deadCrystalBush");
-    }
 
+        //items
+        crystalItem = new CrystalItem().setUnlocalizedName("crystalItem").setTextureName(textureBase + "crystalItem");
+        GameRegistry.registerItem(crystalItem, "crystalItem");
+    }
 
 }
