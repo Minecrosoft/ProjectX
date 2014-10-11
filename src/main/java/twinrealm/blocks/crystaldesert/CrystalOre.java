@@ -1,12 +1,16 @@
 package twinrealm.blocks.crystaldesert;
 
+import java.util.Random;
+
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.item.Item;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import twinrealm.TwinRealm;
 import twinrealm.blocks.TRBaseRock;
 import twinrealm.blocks.TRBlocks;
+import twinrealm.items.TRItems;
 import twinrealm.renderer.CrystalOreRenderer;
 
 /**
@@ -51,6 +55,12 @@ public class CrystalOre extends TRBaseRock
     public int onBlockPlaced(World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ, int metadata)
     {
         return world.rand.nextInt(variants);
+    }
+
+    @Override
+    public Item getItemDropped(int p_149650_1_, Random p_149650_2_, int p_149650_3_)
+    {
+        return TRItems.crystalItem;
     }
 
     @Override
