@@ -12,6 +12,7 @@ import twinrealm.blocks.crystaldesert.CrystalOre;
 import twinrealm.blocks.crystaldesert.CrystalRock;
 import twinrealm.blocks.crystaldesert.CrystalSand;
 import twinrealm.blocks.crystaldesert.DeadCrystalBush;
+import twinrealm.blocks.crystaldesert.QuickSand;
 import twinrealm.items.crystaldesert.CrystalItem;
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -59,8 +60,8 @@ public class Registers
         crystalOre = new CrystalOre().setBlockName("crystalOre");
         GameRegistry.registerBlock(crystalOre, "crystalOre");
 
-        //quickSand = new QuickSand().setBlockName("quickSand").setBlockTextureName(textureBase + "quickSand");
-        //GameRegistry.registerBlock(quickSand, "quickSand");
+        quickSand = new QuickSand().setBlockName("quickSand").setBlockTextureName(textureBase + "quickSand");
+        GameRegistry.registerBlock(quickSand, "quickSand");
 
         deadCrystalBush = new DeadCrystalBush().setBlockName("deadCrystalBush").setBlockTextureName(textureBase + "deadCrystalBush");
         GameRegistry.registerBlock(deadCrystalBush, "deadCrystalBush");
